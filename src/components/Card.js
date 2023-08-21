@@ -6,7 +6,7 @@ const Card = ({ question, author }) => {
     <Link to={"questions/" + question.id}>
       <div className="uk-card uk-card-default uk-card-hover">
         <div className="uk-card-header">
-          <div className="uk-grid-small uk-flex-middle" uk-grid>
+          <div className="uk-grid-small uk-flex-middle uk-grid">
             <div className="uk-width-auto">
               <img
                 className="uk-border-circle"
@@ -27,10 +27,8 @@ const Card = ({ question, author }) => {
             </div>
           </div>
         </div>
-        <div class="uk-card-footer">
-          <a href="#" class="uk-button uk-button-text">
-            Show
-          </a>
+        <div className="uk-card-footer">
+          <button className="uk-button uk-button-text">Show</button>
         </div>
       </div>
     </Link>
