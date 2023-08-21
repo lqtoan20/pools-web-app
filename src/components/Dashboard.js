@@ -12,24 +12,41 @@ const Dashboard = ({ authedUser, questions, users }) => {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mt-9" data-testid="heading">
+      <h1
+        className="uk-heading-medium uk-margin-large-top"
+        data-testid="heading"
+      >
         Dashboard
       </h1>
 
-      <h2 className="text-2xl font-bold mt-6">New Questions</h2>
-      <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <h2 className="uk-h2 uk-margin-medium-top">New Questions</h2>
+      <ul
+        className="uk-grid-small uk-child-width-1-2@s uk-margin-large-top"
+        data-uk-grid
+      >
         {questions.filter(unanswered).map((question) => (
           <li key={question.id}>
-            <Card question={question} author={users[question.author]} />
+            <div className="uk-card uk-card-default uk-card-small uk-card-hover">
+              <div className="uk-card-body">
+                <Card question={question} author={users[question.author]} />
+              </div>
+            </div>
           </li>
         ))}
       </ul>
 
-      <h2 className="text-2xl font-bold mt-6">Answered Questions</h2>
-      <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <h2 className="uk-h2 uk-margin-medium-top">Answered Questions</h2>
+      <ul
+        className="uk-grid-small uk-child-width-1-2@s uk-margin-large-top"
+        data-uk-grid
+      >
         {questions.filter(answered).map((question) => (
           <li key={question.id}>
-            <Card question={question} author={users[question.author]} />
+            <div className="uk-card uk-card-default uk-card-small uk-card-hover">
+              <div className="uk-card-body">
+                <Card question={question} author={users[question.author]} />
+              </div>
+            </div>
           </li>
         ))}
       </ul>

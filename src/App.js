@@ -5,11 +5,11 @@ import { Route, Routes } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 import NewPoll from "./components/NewPoll";
 import PollPage from "./components/PollPage";
-import Leaderboard from "./components/Leaderboard";
+import LeaderBoard from "./components/LeaderBoard";
 import { connect } from "react-redux";
 import Login from "./components/Login";
 import { handleInitialData } from "./actions/shared";
-import Error404 from "./components/404";
+import PageNotFound from "./components/PageNotFound";
 import PrivateRoute from "./components/PrivateRoute";
 
 function App({ dispatch, loggedIn }) {
@@ -18,7 +18,7 @@ function App({ dispatch, loggedIn }) {
   });
 
   return (
-    <div className="container mx-auto py-4">
+    <div className="uk-container uk-margin-medium-top">
       {loggedIn && <Nav />}
       <Routes>
         <Route path="/login" exact element={<Login />} />
@@ -35,7 +35,7 @@ function App({ dispatch, loggedIn }) {
           exact
           element={
             <PrivateRoute>
-              <Leaderboard />
+              <LeaderBoard />
             </PrivateRoute>
           }
         />
@@ -56,7 +56,7 @@ function App({ dispatch, loggedIn }) {
             </PrivateRoute>
           }
         />
-        <Route path="/404" exact element={<Error404 />} />
+        <Route path="/pagenotfound" exact element={<PageNotFound />} />
       </Routes>
     </div>
   );

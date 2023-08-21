@@ -32,54 +32,40 @@ const Login = ({ dispatch, loggedIn }) => {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mt-9" data-testid="login-heading">
-        Login
-      </h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label
-            htmlFor="username"
-            className="block text-sm font-medium text-slate-700"
-          >
+      <h1 className="uk-heading-medium uk-margin-large-top">Login</h1>
+      <form onSubmit={handleSubmit} className="uk-form-stacked">
+        <div className="uk-margin">
+          <label className="uk-form-label" htmlFor="username">
             Username
           </label>
-          <div className="mt-1">
+          <div className="uk-form-controls">
             <input
               value={username}
               onChange={handleUsername}
               type="text"
               name="username"
               id="username"
-              data-testid="username"
-              className="px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400  disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1 invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:shadow-none"
+              className="uk-input"
             />
           </div>
         </div>
-        <div className="mt-6">
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-slate-700"
-          >
+        <div className="uk-margin">
+          <label className="uk-form-label" htmlFor="password">
             Password
           </label>
-          <div className="mt-1">
+          <div className="uk-form-controls">
             <input
               value={password}
               onChange={handlePassword}
               type="password"
               name="password"
               id="password"
-              data-testid="password"
-              className="px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400  disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1 invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:shadow-none"
+              className="uk-input"
             />
           </div>
         </div>
-        <div className="mt-6 text-right">
-          <button
-            type="submit"
-            data-testid="submit"
-            className="bg-sky-500 hover:bg-sky-700 px-5 py-2.5 text-sm leading-5 rounded-md font-semibold text-white"
-          >
+        <div className="uk-margin uk-flex uk-flex-right">
+          <button type="submit" className="uk-button uk-button-primary">
             Login
           </button>
         </div>

@@ -9,37 +9,35 @@ const Nav = ({ dispatch, authedUserId }) => {
   };
 
   return (
-    <nav className="flex justify-center space-x-4">
-      <Link
-        to="/"
-        className="font-medium px-3 py-2 text-slate-700 rounded-lg hover:bg-slate-100 hover:text-slate-900"
-      >
-        Home
-      </Link>
-      <Link
-        to="/leaderboard"
-        className="font-medium px-3 py-2 text-slate-700 rounded-lg hover:bg-slate-100 hover:text-slate-900"
-      >
-        Leaderboard
-      </Link>
-      <Link
-        to="/new"
-        className="font-medium px-3 py-2 text-slate-700 rounded-lg hover:bg-slate-100 hover:text-slate-900"
-      >
-        New Poll
-      </Link>
-      <span
-        className="font-medium px-3 py-2 text-slate-700"
-        data-testid="user-information"
-      >
-        User: {authedUserId}
-      </span>
-      <button
-        onClick={logout}
-        className="font-medium px-3 py-2 text-slate-700 rounded-lg hover:bg-slate-100 hover:text-slate-900"
-      >
-        Logout
-      </button>
+    <nav className="uk-flex uk-flex-center uk-margin-medium-top">
+      <ul className="uk-subnav uk-subnav-divider">
+        <li>
+          <Link to="/" className="uk-text-bold uk-link-text">
+            Home
+          </Link>
+        </li>
+        <li>
+          <Link to="/leaderboards" className="uk-text-bold uk-link-text">
+            Leaderboard
+          </Link>
+        </li>
+        <li>
+          <Link to="/new" className="uk-text-bold uk-link-text">
+            New Poll
+          </Link>
+        </li>
+        <li>
+          <span className="uk-text-bold">{`User: ${authedUserId}`}</span>
+        </li>
+        <li>
+          <button
+            onClick={logout}
+            className="uk-button uk-button-default uk-margin-small-left"
+          >
+            Logout
+          </button>
+        </li>
+      </ul>
     </nav>
   );
 };

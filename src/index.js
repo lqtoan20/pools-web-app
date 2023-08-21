@@ -5,7 +5,7 @@ import { store } from "./stores/store";
 import App from "./App";
 import "./index.css";
 import { BrowserRouter } from "react-router-dom";
-
+import "uikit/dist/css/uikit.min.css";
 const container = document.getElementById("root");
 const root = createRoot(container);
 

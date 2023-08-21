@@ -4,18 +4,28 @@ import { Link } from "react-router-dom";
 const Card = ({ question, author }) => {
   return (
     <Link to={"questions/" + question.id}>
-      <div className="m-3 p-2 rounded-xl shadow-md hover:shadow-xl transition bg-zinc-300 max-w-sm mx-auto flex items-center space-x-4">
-        <div className="shrink-0">
-          <img className="h-12 w-12" src={author?.avatarURL} alt="Author" />
-        </div>
-        <div>
-          <div className="text-xl font-medium text-black">
-            {question.author}
+      <div className="uk-margin-medium uk-padding-small uk-border-rounded uk-box-shadow-small uk-transition-toggle">
+        <div className="uk-flex uk-flex-row uk-flex-middle uk-margin-small">
+          <div className="uk-margin-small-right">
+            <img
+              className="uk-border-circle uk-box-shadow-medium"
+              src={author?.avatarURL}
+              width="48"
+              height="48"
+              alt="Author"
+            />
           </div>
-          <p className="text-xs italic">
-            {new Date(question.timestamp).toDateString()}
+          <div className="uk-flex-column">
+            <div className="uk-h4 uk-margin-remove">{question.author}</div>
+            <p className="uk-text-small uk-margin-remove uk-text-muted">
+              {new Date(question.timestamp).toDateString()}
+            </p>
+          </div>
+        </div>
+        <div className="uk-transition-fade uk-position-small uk-position-bottom-left uk-padding-small">
+          <p className="uk-text-small">
+            <span className="uk-text-primary uk-text-bold">Show</span>
           </p>
-          <p className="underline underline-offset-4">Show</p>
         </div>
       </div>
     </Link>
