@@ -1,6 +1,7 @@
 export const SET_AUTHED_USER = "SET_AUTHED_USER";
 export const LOGOUT_AUTHED_USER = "LOGOUT_AUTHED_USER";
 
+// Action creators
 export function setAuthedUser(authedUser) {
   return {
     type: SET_AUTHED_USER,
@@ -14,6 +15,7 @@ export function logoutAuthedUser() {
   };
 }
 
+// Thunk actions
 export function handleLogin(username, password) {
   return (dispatch, getState) => {
     const { users } = getState();
@@ -22,14 +24,18 @@ export function handleLogin(username, password) {
       (user) => user.id === username && user.password === password
     );
 
-    if (!!user) {
-      return dispatch(setAuthedUser(user));
+    if (user) {
+      dispatch(setAuthedUser(user));
+    } else {
+      // Handle login failure here (e.g., show an error message)
+      console.log("Login failed: Invalid username or password");
     }
   };
 }
 
 export function handleLogout() {
   return (dispatch) => {
-    return dispatch(logoutAuthedUser());
+    dispatch(logoutAuthedUser());
+    // Perform additional logout-related actions if needed
   };
 }

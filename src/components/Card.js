@@ -4,28 +4,33 @@ import { Link } from "react-router-dom";
 const Card = ({ question, author }) => {
   return (
     <Link to={"questions/" + question.id}>
-      <div className="uk-margin-medium uk-padding-small uk-border-rounded uk-box-shadow-small uk-transition-toggle">
-        <div className="uk-flex uk-flex-row uk-flex-middle uk-margin-small">
-          <div className="uk-margin-small-right">
-            <img
-              className="uk-border-circle uk-box-shadow-medium"
-              src={author?.avatarURL}
-              width="48"
-              height="48"
-              alt="Author"
-            />
-          </div>
-          <div className="uk-flex-column">
-            <div className="uk-h4 uk-margin-remove">{question.author}</div>
-            <p className="uk-text-small uk-margin-remove uk-text-muted">
-              {new Date(question.timestamp).toDateString()}
-            </p>
+      <div className="uk-card uk-card-default uk-card-hover">
+        <div className="uk-card-header">
+          <div className="uk-grid-small uk-flex-middle" uk-grid>
+            <div className="uk-width-auto">
+              <img
+                className="uk-border-circle"
+                width="40"
+                height="40"
+                src={author?.avatarURL}
+                alt="Avatar"
+              />
+            </div>
+            <div className="uk-width-expand">
+              <h3 className="uk-card-title uk-margin-remove-bottom">
+                {question.author}
+              </h3>
+              <p className="uk-text-meta uk-margin-remove-top">
+                {" "}
+                {new Date(question.timestamp).toDateString()}
+              </p>
+            </div>
           </div>
         </div>
-        <div className="uk-transition-fade uk-position-small uk-position-bottom-left uk-padding-small">
-          <p className="uk-text-small">
-            <span className="uk-text-primary uk-text-bold">Show</span>
-          </p>
+        <div class="uk-card-footer">
+          <a href="#" class="uk-button uk-button-text">
+            Show
+          </a>
         </div>
       </div>
     </Link>

@@ -56,6 +56,7 @@ function App({ dispatch, loggedIn }) {
             </PrivateRoute>
           }
         />
+        <Route path="*" element={<PageNotFound />} />
         <Route path="/pagenotfound" exact element={<PageNotFound />} />
       </Routes>
     </div>

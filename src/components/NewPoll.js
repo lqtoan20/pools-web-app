@@ -2,7 +2,7 @@ import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { handleAddQuestion } from "../actions/questions";
-// import UIkit from "uikit";
+import UIkit from "uikit";
 
 const NewPoll = ({ dispatch }) => {
   const navigate = useNavigate();
