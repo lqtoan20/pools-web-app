@@ -32,7 +32,12 @@ const Login = ({ dispatch, loggedIn }) => {
 
   return (
     <div>
-      <h1 className="uk-heading-medium uk-margin-large-top">Login</h1>
+      <h1
+        className="uk-heading-medium uk-margin-large-top"
+        data-testid="login-heading"
+      >
+        Login
+      </h1>
       <form onSubmit={handleSubmit} className="uk-form-stacked">
         <div className="uk-margin">
           <label className="uk-form-label" htmlFor="username">
@@ -46,6 +51,7 @@ const Login = ({ dispatch, loggedIn }) => {
               name="username"
               id="username"
               className="uk-input"
+              data-testid="username"
             />
           </div>
         </div>
@@ -61,11 +67,16 @@ const Login = ({ dispatch, loggedIn }) => {
               name="password"
               id="password"
               className="uk-input"
+              data-testid="password"
             />
           </div>
         </div>
         <div className="uk-margin uk-flex uk-flex-right">
-          <button type="submit" className="uk-button uk-button-primary">
+          <button
+            type="submit"
+            className="uk-button uk-button-primary"
+            data-testid="submit"
+          >
             Login
           </button>
         </div>

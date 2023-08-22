@@ -12,7 +12,12 @@ const Dashboard = ({ authedUser, questions, users }) => {
 
   return (
     <div>
-      <h2 className="uk-h2 uk-text-bolder uk-text-center">New Questions</h2>
+      <h2
+        className="uk-h2 uk-text-bolder uk-text-center"
+        data-testid="new-question"
+      >
+        New Questions
+      </h2>
       <ul
         className="uk-grid-small uk-child-width-1-2@s uk-margin-large-top"
         data-uk-grid
@@ -28,7 +33,10 @@ const Dashboard = ({ authedUser, questions, users }) => {
         ))}
       </ul>
 
-      <h2 className="uk-h2 uk-text-bolder uk-text-center">
+      <h2
+        className="uk-h2 uk-text-bolder uk-text-center"
+        data-testid="answered-question"
+      >
         Answered Questions
       </h2>
       <ul

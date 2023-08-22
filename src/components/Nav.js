@@ -27,7 +27,10 @@ const Nav = ({ dispatch, authedUserId }) => {
           </Link>
         </li>
         <li>
-          <span className="uk-text-bold">{`User: ${authedUserId}`}</span>
+          <span
+            data-testid="information-data"
+            className="uk-text-bold"
+          >{`User: ${authedUserId}`}</span>
         </li>
         <li>
           <button
