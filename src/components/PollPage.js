@@ -54,7 +54,7 @@ const PollPage = ({ dispatch, authedUser, question, author }) => {
         <img
           src={author.avatarURL}
           alt="Profile"
-          className="uk-height-24 uk-width-24"
+          className="uk-width-1-2 uk-justify-center"
         />
       </div>
 

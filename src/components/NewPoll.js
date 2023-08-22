@@ -22,11 +22,11 @@ const NewPoll = ({ dispatch }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(handleAddQuestion(firstOption, secondOption));
-    // UIkit.notification("Question added successfully!", {
-    //   status: "success",
-    // });
-    // setFirstOption("");
-    // setSecondOption("");
+    UIkit.notification("Question added successfully!", {
+      status: "success",
+    });
+    setFirstOption("");
+    setSecondOption("");
     navigate("/");
   };
 
