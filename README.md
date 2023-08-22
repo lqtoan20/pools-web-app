@@ -11,12 +11,12 @@ To get started developing right away:
 
 ## Folder structure
 
-| Folder                    | Description                               |
-| ------------------------- | ----------------------------------------- |
-| `__tests__/__snapshots__` | Include snapshot files                    |
-| `__tests__`               | Include all test for app                  |
-| `actions`                 | Include action for questions/shared/users |
-| `components`              | Template for network VPC                  |
-| `helper`                  | Include mock data and api                 |
-| `reducers`                | Reducers for app                          |
-| `stores`                  | Config store for app                      |
+| Folder                    | Description                                                        |
+| ------------------------- | ------------------------------------------------------------------ |
+| `__tests__`               | Include all test for app                                           |
+| `__tests__/__snapshots__` | Include snapshots files                                            |
+| `actions`                 | Include function for app                                           |
+| `components`              | Include all component for app Card, Dashboard, Login, Nav, Poll... |
+| `helper`                  | Include mock data and api                                          |
+| `reducers`                | Reducers for app                                                   |
+| `stores`                  | Config store for app                                               |
