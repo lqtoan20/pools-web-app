@@ -32,7 +32,8 @@ describe("Nav", () => {
       </Provider>
     );
 
-    const userSpanElement = component.getByTestId("information-data");
-    expect(userSpanElement.textContent).toBe("User: sarahedo");
+    expect(component.getByTestId("information-data").textContent).toBe(
+      "User: sarahedo"
+    );
   });
 });

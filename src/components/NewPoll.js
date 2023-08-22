@@ -48,6 +48,7 @@ const NewPoll = ({ dispatch }) => {
               name="firstOption"
               id="firstOption"
               className="uk-input"
+              data-testid="first-option"
             />
           </div>
         </div>
@@ -63,6 +64,7 @@ const NewPoll = ({ dispatch }) => {
               type="text"
               name="secondOption"
               id="secondOption"
+              data-testid="second-option"
               className="uk-input"
             />
           </div>
