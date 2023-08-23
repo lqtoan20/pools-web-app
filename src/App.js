@@ -59,7 +59,6 @@ function App() {
             </PrivateRoute>
           }
         />
-        <Route path="*" element={<PageNotFound />} />
         <Route path="/pagenotfound" exact element={<PageNotFound />} />
       </Routes>
     </div>

@@ -50,7 +50,6 @@ const PollPage = () => {
         return "";
     }
   };
-
   return (
     <div>
       <h1 className="uk-text-large">Poll by {author.id}</h1>
@@ -58,7 +57,7 @@ const PollPage = () => {
         <img
           src={author.avatarURL}
           alt="Profile"
-          className="uk-width-1-2 uk-justify-center"
+          className="uk-width-1-6 uk-justify-center"
         />
       </div>
 
@@ -74,32 +73,34 @@ const PollPage = () => {
             key={option}
             onClick={handleVote(option)}
             disabled={hasVoted}
-            className={
-              "uk-button uk-button-primary uk-button-large uk-border-rounded uk-box-shadow-hover-small " +
-              (hasVotedForOptionOne && option === "optionOne"
-                ? "bg-lime-400"
-                : hasVotedForOptionTwo && option === "optionTwo"
-                ? "bg-lime-400"
-                : "bg-blue-400") // Change the default button color to blue
-            }
+            className="uk-button uk-button-primary uk-button-large uk-border-rounded uk-box-shadow-hover-small"
           >
-            <div className={hasVoted && hasVotedForOptionOne ? "chosen" : ""}>
-              <p className="uk-text-bold uk-margin-small-bottom text-green-600">
-                {" "}
-                {/* Change text color to green */}
+            <div
+              className={
+                option === "optionOne"
+                  ? "md-bg-red-200"
+                  : "md-bg-light-blue-200"
+              }
+            >
+              <p
+                className={`uk-text-bold uk-margin-small-bottom text-green-600 ${
+                  hasVoted &&
+                  (option === "optionOne"
+                    ? "uk-text-warning"
+                    : "uk-text-primary")
+                }
+
+              `}
+              >
                 {question[option].text}
               </p>
               {!hasVoted && (
                 <p className="uk-text-underline uk-text-underline-offset uk-margin-small-bottom text-green-600">
-                  {" "}
-                  {/* Change text color to green */}
                   Click
                 </p>
               )}
               {hasVoted && (
-                <p className="uk-text-small text-green-600">
-                  {" "}
-                  {/* Change text color to green */}
+                <p className="uk-text-small uk-text-success">
                   Votes: {question[option].votes.length} (
                   {calcPercentage(option)})
                 </p>
