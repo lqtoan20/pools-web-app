@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { handleAddAnswer } from "../actions/questions";
 import UIkit from "uikit";
 
@@ -10,16 +10,13 @@ const PollPage = () => {
   const { id } = useParams();
   const authedUser = useSelector((state) => state.authedUser);
   const question = useSelector((state) => state.questions[id]);
-  const author = useSelector((state) => state.users[question.author]);
+  const author = useSelector((state) =>
+    question ? state.users[question.author] : null
+  );
 
-  useEffect(() => {
-    if (!authedUser || !question || !author) {
-      UIkit.notification("Question or user not found.", {
-        status: "danger",
-      });
-      navigate("/pagenotfound");
-    }
-  }, [authedUser, question, author, navigate]);
+  if (!question || !author) {
+    return <Navigate to="/pagenotfound" />;
+  }
 
   const hasVotedForOptionOne = question.optionOne.votes.includes(authedUser.id);
   const hasVotedForOptionTwo = question.optionTwo.votes.includes(authedUser.id);
