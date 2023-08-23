@@ -1,19 +1,11 @@
-import { fireEvent, render } from "@testing-library/react";
-import { Provider } from "react-redux";
-import { store } from "../stores/store";
-import { BrowserRouter } from "react-router-dom";
+import { fireEvent } from "@testing-library/react";
 import React from "react";
 import NewPoll from "../components/NewPoll";
+import { Wrapper } from "../test-utils";
 
 describe("NewPoll", () => {
   it("Should render component and display all elements", () => {
-    const component = render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <NewPoll />
-        </BrowserRouter>
-      </Provider>
-    );
+    const component = Wrapper(<NewPoll />);
     expect(component).toBeDefined();
     expect(component).toMatchSnapshot();
 

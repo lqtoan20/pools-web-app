@@ -6,16 +6,19 @@ import Dashboard from "./components/Dashboard";
 import NewPoll from "./components/NewPoll";
 import PollPage from "./components/PollPage";
 import LeaderBoard from "./components/LeaderBoard";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Login from "./components/Login";
 import { handleInitialData } from "./actions/shared";
 import PageNotFound from "./components/PageNotFound";
 import PrivateRoute from "./components/PrivateRoute";
 
-function App({ dispatch, loggedIn }) {
+function App() {
+  const loggedIn = useSelector((state) => !!state.authedUser);
+  const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(handleInitialData());
-  });
+  }, [dispatch]);
 
   return (
     <div className="uk-container uk-margin-medium-top">
@@ -63,8 +66,4 @@ function App({ dispatch, loggedIn }) {
   );
 }
 
-const mapStateToProps = ({ authedUser }) => ({
-  loggedIn: !!authedUser,
-});
-
-export default connect(mapStateToProps)(App);
+export default App;

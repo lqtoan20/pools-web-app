@@ -1,9 +1,6 @@
 import React from "react";
-import { render } from "@testing-library/react";
-import { Provider } from "react-redux"; // For providing the store
 import Card from "../components/Card"; // Adjust the path accordingly
-import { store } from "../stores/store";
-import { BrowserRouter } from "react-router-dom";
+import { Wrapper } from "../test-utils";
 
 // Basic test to check if the component renders correctly
 test("Card component renders correctly", () => {
@@ -17,14 +14,7 @@ test("Card component renders correctly", () => {
     avatarURL: "https://example.com/avatar.jpg",
   };
 
-  const { getByText } = render(
-    <Provider store={store}>
-      <BrowserRouter>
-        <Card question={question} author={author} />
-      </BrowserRouter>
-    </Provider>
-  );
-
+  const { getByText } = Wrapper(<Card question={question} author={author} />);
   expect(getByText("sarahedo")).toBeInTheDocument();
   expect(getByText("Fri Aug 27 2021")).toBeInTheDocument();
 });
@@ -41,13 +31,6 @@ test("Card component matches snapshot", () => {
     avatarURL: "https://example.com/avatar.jpg",
   };
 
-  const component = render(
-    <Provider store={store}>
-      <BrowserRouter>
-        <Card question={question} author={author} />
-      </BrowserRouter>
-    </Provider>
-  );
-
+  const component = Wrapper(<Card question={question} author={author} />);
   expect(component).toMatchSnapshot();
 });

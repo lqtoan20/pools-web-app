@@ -1,22 +1,13 @@
-import { render } from "@testing-library/react";
-import { Provider } from "react-redux";
 import { store } from "../stores/store";
-import { BrowserRouter } from "react-router-dom";
 import React from "react";
 import Nav from "../components/Nav";
 import { setAuthedUser } from "../actions/authedUser";
+import { Wrapper } from "../test-utils";
 
 describe("Nav", () => {
   it("should render the component", () => {
     store.dispatch(setAuthedUser({ id: "sarahedo", password: "" }));
-
-    const component = render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <Nav />
-        </BrowserRouter>
-      </Provider>
-    );
+    const component = Wrapper(<Nav />);
     expect(component).toBeDefined();
     expect(component).toMatchSnapshot();
   });
@@ -24,13 +15,7 @@ describe("Nav", () => {
   it("should display username of logged in user", () => {
     store.dispatch(setAuthedUser({ id: "sarahedo", password: "" }));
 
-    const component = render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <Nav />
-        </BrowserRouter>
-      </Provider>
-    );
+    const component = Wrapper(<Nav />);
 
     expect(component.getByTestId("information-data").textContent).toBe(
       "User: sarahedo"

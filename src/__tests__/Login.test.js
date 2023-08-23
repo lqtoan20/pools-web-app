@@ -1,18 +1,10 @@
 import React from "react";
-import { render, fireEvent } from "@testing-library/react";
-import { Provider } from "react-redux";
-import { BrowserRouter } from "react-router-dom";
-import { store } from "../stores/store";
+import { fireEvent } from "@testing-library/react";
 import Login from "../components/Login";
+import { Wrapper } from "../test-utils";
 
 test("Login component renders correctly", () => {
-  const { getByTestId } = render(
-    <Provider store={store}>
-      <BrowserRouter>
-        <Login />
-      </BrowserRouter>
-    </Provider>
-  );
+  const { getByTestId } = Wrapper(<Login />);
 
   expect(getByTestId("login-heading")).toHaveTextContent("Login");
   expect(getByTestId("username")).toBeInTheDocument();
@@ -20,13 +12,7 @@ test("Login component renders correctly", () => {
 });
 
 test("Submitting form triggers handleLogin", async () => {
-  const component = render(
-    <Provider store={store}>
-      <BrowserRouter>
-        <Login />
-      </BrowserRouter>
-    </Provider>
-  );
+  const component = Wrapper(<Login />);
 
   const usernameInput = component.getByTestId("username");
   const passwordInput = component.getByTestId("password");
