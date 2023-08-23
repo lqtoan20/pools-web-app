@@ -5,7 +5,7 @@ import { Route, Routes } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 import NewPoll from "./components/NewPoll";
 import PollPage from "./components/PollPage";
-import LeaderBoard from "./components/LeaderBoard";
+import Leaderboard from "./components/Leaderboard";
 import { useSelector, useDispatch } from "react-redux";
 import Login from "./components/Login";
 import { handleInitialData } from "./actions/shared";
@@ -38,7 +38,7 @@ function App() {
           exact
           element={
             <PrivateRoute>
-              <LeaderBoard />
+              <Leaderboard />
             </PrivateRoute>
           }
         />

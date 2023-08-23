@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 
-const LeaderBoard = () => {
+const Leaderboard = () => {
   const users = useSelector((state) =>
     Object.values(state.users).sort(
       (a, b) => Object.keys(b.answers).length - Object.keys(a.answers).length
@@ -36,4 +36,4 @@ const LeaderBoard = () => {
   );
 };
 
-export default LeaderBoard;
+export default Leaderboard;

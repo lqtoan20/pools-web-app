@@ -44,7 +44,9 @@ const Dashboard = () => {
           checked={isToggle === "unanswered"}
           onChange={handleToggleChange}
         />
-        <label htmlFor="unanswered">Unanswered</label>
+        <label htmlFor="unanswered" data-testid="new-question">
+          Unanswered
+        </label>
       </div>
       <div>
         <input
@@ -55,7 +57,9 @@ const Dashboard = () => {
           checked={isToggle === "answered"}
           onChange={handleToggleChange}
         />
-        <label htmlFor="answered">Answered</label>
+        <label htmlFor="answered" data-testid="answered-question">
+          Answered
+        </label>
       </div>
       <ul
         className="uk-grid-small uk-child-width-1-2@s uk-margin-large-top"
