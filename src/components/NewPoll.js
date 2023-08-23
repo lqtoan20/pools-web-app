@@ -1,10 +1,11 @@
-import { connect } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import { handleAddQuestion } from "../actions/questions";
 import UIkit from "uikit";
 
-const NewPoll = ({ dispatch }) => {
+const NewPoll = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [firstOption, setFirstOption] = useState("");
   const [secondOption, setSecondOption] = useState("");
@@ -84,4 +85,4 @@ const NewPoll = ({ dispatch }) => {
   );
 };
 
-export default connect()(NewPoll);
+export default NewPoll;

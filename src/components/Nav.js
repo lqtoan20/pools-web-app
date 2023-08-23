@@ -1,8 +1,12 @@
+import React from "react";
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { handleLogout } from "../actions/authedUser";
 
-const Nav = ({ dispatch, authedUserId }) => {
+const Nav = () => {
+  const authedUserId = useSelector((state) => state.authedUser.id);
+  const dispatch = useDispatch();
+
   const logout = (e) => {
     e.preventDefault();
     dispatch(handleLogout());
@@ -45,8 +49,4 @@ const Nav = ({ dispatch, authedUserId }) => {
   );
 };
 
-const mapStateToProps = ({ authedUser }) => ({
-  authedUserId: authedUser.id,
-});
-
-export default connect(mapStateToProps)(Nav);
+export default Nav;

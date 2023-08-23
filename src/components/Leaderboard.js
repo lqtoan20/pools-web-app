@@ -1,6 +1,13 @@
-import { connect } from "react-redux";
+import React from "react";
+import { useSelector } from "react-redux";
 
-const LeaderBoard = ({ users }) => {
+const LeaderBoard = () => {
+  const users = useSelector((state) =>
+    Object.values(state.users).sort(
+      (a, b) => Object.keys(b.answers).length - Object.keys(a.answers).length
+    )
+  );
+
   return (
     <div>
       <table className="uk-table uk-table-hover uk-table-striped">
@@ -18,7 +25,7 @@ const LeaderBoard = ({ users }) => {
               <td>
                 <span className="uk-text-bold">{user.name}</span>
               </td>
-              <td> {user.id}</td>
+              <td>{user.id}</td>
               <td>{Object.keys(user.answers).length}</td>
               <td>{user.questions.length}</td>
             </tr>
@@ -29,10 +36,4 @@ const LeaderBoard = ({ users }) => {
   );
 };
 
-const mapStateToProps = ({ users }) => ({
-  users: Object.values(users).sort(
-    (a, b) => Object.keys(b.answers).length - Object.keys(a.answers).length
-  ),
-});
-
-export default connect(mapStateToProps)(LeaderBoard);
+export default LeaderBoard;

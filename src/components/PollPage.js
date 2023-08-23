@@ -1,13 +1,17 @@
-import { connect } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useParams, useNavigate } from "react-router-dom";
 import { handleAddAnswer } from "../actions/questions";
 import UIkit from "uikit";
-import { useEffect } from "react"; // Import useEffect
 
-const PollPage = ({ dispatch, authedUser, question, author }) => {
+const PollPage = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { id } = useParams();
+  const authedUser = useSelector((state) => state.authedUser);
+  const question = useSelector((state) => state.questions[id]);
+  const author = useSelector((state) => state.users[question.author]);
 
-  // Use useEffect to handle initial data fetching
   useEffect(() => {
     if (!authedUser || !question || !author) {
       UIkit.notification("Question or user not found.", {
@@ -108,14 +112,4 @@ const PollPage = ({ dispatch, authedUser, question, author }) => {
   );
 };
 
-const mapStateToProps = ({ authedUser, users, questions }) => {
-  const question = Object.values(questions).find(
-    (question) => question.id === useParams().id
-  );
-  const author = Object.values(users).find(
-    (user) => user.id === question.author
-  );
-  return { authedUser, question, author };
-};
-
-export default connect(mapStateToProps)(PollPage);
+export default PollPage;

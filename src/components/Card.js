@@ -1,4 +1,4 @@
-import { connect } from "react-redux";
+import React from "react";
 import { Link } from "react-router-dom";
 
 const Card = ({ question, author }) => {
@@ -21,7 +21,6 @@ const Card = ({ question, author }) => {
                 {question.author}
               </h3>
               <p className="uk-text-meta uk-margin-remove-top">
-                {" "}
                 {new Date(question.timestamp).toDateString()}
               </p>
             </div>
@@ -35,4 +34,4 @@ const Card = ({ question, author }) => {
   );
 };
 
-export default connect()(Card);
+export default Card;

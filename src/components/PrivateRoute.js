@@ -1,7 +1,9 @@
+import React from "react";
 import { Navigate } from "react-router-dom";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 
-const PrivateRoute = ({ children, loggedIn }) => {
+const PrivateRoute = ({ children }) => {
+  const loggedIn = useSelector((state) => !!state.authedUser);
   const redirectUrl = window.location.href
     .toString()
     .split(window.location.host)[1];
@@ -13,8 +15,4 @@ const PrivateRoute = ({ children, loggedIn }) => {
   }
 };
 
-const mapStateToProps = ({ authedUser }) => ({
-  loggedIn: !!authedUser,
-});
-
-export default connect(mapStateToProps)(PrivateRoute);
+export default PrivateRoute;

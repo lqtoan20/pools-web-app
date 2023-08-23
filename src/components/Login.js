@@ -1,17 +1,14 @@
-import { connect } from "react-redux";
-import { Navigate } from "react-router-dom";
-import { useState } from "react";
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Navigate, useHistory } from "react-router-dom";
 import { handleLogin } from "../actions/authedUser";
 
-const Login = ({ dispatch, loggedIn }) => {
+const Login = () => {
+  const loggedIn = useSelector((state) => !!state.authedUser);
+  const dispatch = useDispatch();
+
   const [username, setUsername] = useState("sarahedo");
   const [password, setPassword] = useState("password123");
-
-  if (loggedIn) {
-    const urlParams = new URLSearchParams(window.location.search);
-    const redirectUrl = urlParams.get("redirectTo");
-    return <Navigate to={redirectUrl ? redirectUrl : "/"} />;
-  }
 
   const handleUsername = (e) => {
     const value = e.target.value;
@@ -29,6 +26,12 @@ const Login = ({ dispatch, loggedIn }) => {
     setUsername("");
     setPassword("");
   };
+
+  if (loggedIn) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const redirectUrl = urlParams.get("redirectTo");
+    return <Navigate to={redirectUrl || "/"} />;
+  }
 
   return (
     <div>
@@ -85,8 +88,4 @@ const Login = ({ dispatch, loggedIn }) => {
   );
 };
 
-const mapStateToProps = ({ authedUser }) => ({
-  loggedIn: !!authedUser,
-});
-
-export default connect(mapStateToProps)(Login);
+export default Login;

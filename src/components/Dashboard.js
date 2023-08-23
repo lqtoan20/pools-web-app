@@ -1,7 +1,14 @@
-import { connect } from "react-redux";
+import React from "react";
+import { useSelector } from "react-redux";
 import Card from "./Card";
 
-const Dashboard = ({ authedUser, questions, users }) => {
+const Dashboard = () => {
+  const authedUser = useSelector((state) => state.authedUser);
+  const questions = useSelector((state) =>
+    Object.values(state.questions).sort((a, b) => b.timestamp - a.timestamp)
+  );
+  const users = useSelector((state) => state.users);
+
   const unanswered = (question) =>
     !question.optionOne.votes.includes(authedUser.id) &&
     !question.optionTwo.votes.includes(authedUser.id);
@@ -57,10 +64,4 @@ const Dashboard = ({ authedUser, questions, users }) => {
   );
 };
 
-const mapStateToProps = ({ authedUser, questions, users }) => ({
-  authedUser,
-  questions: Object.values(questions).sort((a, b) => b.timestamp - a.timestamp),
-  users,
-});
-
-export default connect(mapStateToProps)(Dashboard);
+export default Dashboard;
