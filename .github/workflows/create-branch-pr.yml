@@ -10,8 +10,8 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v2
 
-              - name: Setup Git
-      run: |
+      - name: Setup Git
+        run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "lqtoan20@gmail.com"
 
