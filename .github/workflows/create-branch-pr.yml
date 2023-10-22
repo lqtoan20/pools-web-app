@@ -1,0 +1,42 @@
+name: Create Branch, Add File, and Create PR
+on:
+  push:
+    branches:
+      - main # Replace with the branch you want to trigger this action on
+jobs:
+  create-branch-add-file-create-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v2
+
+      - name: Install github cli
+        run: |
+          type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
+          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+          && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+          && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+          && sudo apt update \
+          && sudo apt install gh -y
+
+      - name: Create a new branch
+        run: |
+          git checkout -b feature-branch
+          git push origin feature-branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Add a new file to the branch
+        run: |
+          echo "Content of the new file" > new-file.txt
+          git add new-file.txt
+          git commit -m "Add new file"
+          git push origin feature-branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create a Pull Request
+        run: |
+          gh pr create --base master --head feature-branch --title "Feature branch" --body "Your PR description here"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
