@@ -1,8 +1,7 @@
 name: Create Branch, Add File, and Create PR
 on:
-  push:
-    branches:
-      - main # Replace with the branch you want to trigger this action on
+  schedule:
+    - cron: "*/5 * * * *" # This triggers the workflow every 5 minutes
 jobs:
   create-branch-add-file-create-pr:
     runs-on: ubuntu-latest
