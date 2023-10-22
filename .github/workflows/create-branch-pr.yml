@@ -1,8 +1,7 @@
 name: Create Branch, Add File, and Create PR
 on:
   schedule:
-    - cron: "5 * * * *"
-  workflow_dispatch:
+    - cron: "20 * * * *"
 
 jobs:
   create-branch-add-file-create-pr:
