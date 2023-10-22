@@ -1,7 +1,7 @@
 name: Create Branch, Add File, and Create PR
 on:
   schedule:
-    - cron: "30 11 * * *" # This triggers the workflow daily at 11:25 AM
+    - cron: "35 4 * * *" # This triggers the workflow daily at 11:25 AM
 jobs:
   create-branch-add-file-create-pr:
     runs-on: ubuntu-latest
