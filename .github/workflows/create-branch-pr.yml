@@ -29,4 +29,4 @@ jobs:
           commit-message: "Auto-generated changes"
           token: ${{ secrets.GITHUB_TOKEN }}
           team-reviewers: |
-            toanla2002
+            testautoadd
