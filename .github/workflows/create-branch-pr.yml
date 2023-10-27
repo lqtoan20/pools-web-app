@@ -18,8 +18,8 @@ jobs:
       #     git config user.name "GitHub Actions Bot"
       #     git config user.email "lqtoan20@gmail.com"
 
-    - name: Install github cli
-      run: |
+      - name: Install github cli
+        run: |
           type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
           curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
           && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
@@ -27,17 +27,17 @@ jobs:
           && sudo apt update \
           && sudo apt install gh -y
 
-    - name: Get Team Members
-      run: |
-        # Sử dụng GitHub CLI API để lấy danh sách thành viên từ nhóm cụ thể trong tổ chức
-        team_members_json=$(gh api -X GET "orgs/toanla2002/teams/testautoadd/members")
+      - name: Get Team Members
+        run: |
+          # Sử dụng GitHub CLI API để lấy danh sách thành viên từ nhóm cụ thể trong tổ chức
+          team_members_json=$(gh api -X GET "orgs/toanla2002/teams/testautoadd/members")
 
-        # Xử lý kết quả JSON tại đây nếu cần
-        # Ví dụ: Lấy danh sách các tên đăng nhập từ JSON
-        members=$(echo "$team_members_json" | jq -r '.[].login')
-        echo "Team Members: $members"
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Xử lý kết quả JSON tại đây nếu cần
+          # Ví dụ: Lấy danh sách các tên đăng nhập từ JSON
+          members=$(echo "$team_members_json" | jq -r '.[].login')
+          echo "Team Members: $members"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check if Branch Exists
         id: branch-check
