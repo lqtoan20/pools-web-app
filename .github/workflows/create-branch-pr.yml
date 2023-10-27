@@ -33,12 +33,10 @@ jobs:
           team_slug="testautoadd"
 
           # Lấy danh sách thành viên từ nhóm
-          members=$(curl -H "Authorization: token ${{ secrets.TOKEN_PAT }}" -s "https://api.github.com/orgs/$org/teams/$team_slug/members" | jq -r '.[].login')
+          members1=$(curl -H "Authorization: token ${{ secrets.TOKEN_PAT }}" -s "https://api.github.com/orgs/$org/teams/$team_slug/members"')
 
           # Duyệt qua danh sách thành viên và thêm họ vào PR
-          for member in $members; do
-            curl -X POST -H "Authorization: token ${{ secrets.TOKEN_PAT }}" -s "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/requested_reviewers" -d "{\"reviewers\": [\"$member\"]}"
-          done
+          echo "Team Members: $members1"
 
       - name: Get Team Members
         run: |
