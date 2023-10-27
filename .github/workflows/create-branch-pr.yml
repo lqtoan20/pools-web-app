@@ -18,16 +18,27 @@ jobs:
           git config user.name "GitHub Actions Bot"
           git config user.email "lqtoan20@gmail.com"
 
-      - name: Get Team Members
-        id: team-members
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Get Team Members
+      #   id: team-members
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   run: |
+      #     TEAM_SLUG="testautoadd"
+      #     ORGANIZATION="toanla2002"
+      #     TEAM_MEMBERS=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/orgs/${ORGANIZATION}/teams/${TEAM_SLUG}/members")
+      #     echo "Team Members:"
+      #     echo "${TEAM_MEMBERS}"  # Print the list of team members to the screen
+
+      - name: Add Team Members to PR
         run: |
-          TEAM_SLUG="testautoadd"
-          ORGANIZATION="toanla2002"
-          TEAM_MEMBERS=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/orgs/${ORGANIZATION}/teams/${TEAM_SLUG}/members")
+          # Thay đổi tên tổ chức và nhóm của bạn theo cấu trúc URL
+          org="toanla2002"
+          team_slug="testautoadd"
+
+          # Lấy danh sách thành viên từ nhóm
+          members=$(curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -s "https://api.github.com/orgs/$org/teams/$team_slug/members" | jq -r '.[].login')
           echo "Team Members:"
-          echo "${TEAM_MEMBERS}"  # Print the list of team members to the screen
+          echo "${members}"  # Print the list of team members to the screen
 
       - name: Check if Branch Exists
         id: branch-check
