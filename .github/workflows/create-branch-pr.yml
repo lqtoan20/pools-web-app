@@ -13,26 +13,31 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Setup Git
-        run: |
-          git config user.name "GitHub Actions Bot"
-          git config user.email "lqtoan20@gmail.com"
+      # - name: Setup Git
+      #   run: |
+      #     git config user.name "GitHub Actions Bot"
+      #     git config user.email "lqtoan20@gmail.com"
 
-      - name: Add Team Members to PR
+      - name: Install github cli
         run: |
-          # Thay đổi tên tổ chức và nhóm của bạn theo cấu trúc URL
-          org="toanla2002"
-          team_slug="testautoadd"
+          type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
+          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+          && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+          && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+          && sudo apt update \
+          && sudo apt install gh -y
 
-          # Lấy danh sách thành viên từ nhóm
-          members=$(curl -L \
-                      -H "Accept: application/vnd.github+json" \
-                      -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-                      -H "X-GitHub-Api-Version: 2022-11-28" \
-                      https://api.github.com/orgs/$org/teams/$team_slug/members)
-          # members=$(curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -s "https://api.github.com/orgs/$org/teams/$team_slug/members")
-          echo "Team Members:"
-          echo "${members}"  # Print the list of team members to the screen
+    - name: Get Team Members
+      run: |
+        # Sử dụng GitHub CLI API để lấy danh sách thành viên từ nhóm cụ thể trong tổ chức
+        team_members_json=$(gh api -X GET "orgs/toanla2002/teams/testautoadd/members")
+
+        # Xử lý kết quả JSON tại đây nếu cần
+        # Ví dụ: Lấy danh sách các tên đăng nhập từ JSON
+        members=$(echo "$team_members_json" | jq -r '.[].login')
+        echo "Team Members: $members"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check if Branch Exists
         id: branch-check
@@ -55,14 +60,14 @@ jobs:
       - name: Make changes to pull request
         run: date +%s > report.txt
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
-        with:
-          title: Auto-generated Pull Request
-          branch: new-feature
-          base: main # Change this to your desired base branch
-          commit-message: "Auto-generated changes"
-          reviewers: ${members}
-          token: ${{ secrets.GITHUB_TOKEN }}
-          team-reviewers: |
-            teams/testautoadd
+      # - name: Create Pull Request
+      #   uses: peter-evans/create-pull-request@v5
+      #   with:
+      #     title: Auto-generated Pull Request
+      #     branch: new-feature
+      #     base: main # Change this to your desired base branch
+      #     commit-message: "Auto-generated changes"
+      #     reviewers: ${members}
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     team-reviewers: |
+      #       teams/testautoadd
