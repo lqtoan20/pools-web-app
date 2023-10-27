@@ -37,7 +37,7 @@ jobs:
           members=$(echo "$team_members_json" | jq -r '.[].login')
           echo "Team Members: $members"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN_PATH }}
 
       - name: Check if Branch Exists
         id: branch-check
