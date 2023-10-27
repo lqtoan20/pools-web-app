@@ -48,4 +48,4 @@ jobs:
           commit-message: "Auto-generated changes"
           token: ${{ secrets.GITHUB_TOKEN }}
           team-reviewers: |
-            testautoadd
+            orgs/toanla2002/teams/testautoadd
