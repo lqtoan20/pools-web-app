@@ -36,7 +36,7 @@ jobs:
           team_slug="testautoadd"
 
           # Lấy danh sách thành viên từ nhóm
-          members=$(curl -H "Authorization: token ${{ secrets.TOKEN_PATH }}" -s "https://api.github.com/orgs/$org/teams/$team_slug/members")
+          members=$(curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -s "https://api.github.com/orgs/$org/teams/$team_slug/members")
           echo "Team Members:"
           echo "${members}"  # Print the list of team members to the screen
 
@@ -68,7 +68,7 @@ jobs:
           branch: new-feature
           base: main # Change this to your desired base branch
           commit-message: "Auto-generated changes"
-          reviewers: ${TEAM_MEMBERS}
+          reviewers: ${members}
           token: ${{ secrets.GITHUB_TOKEN }}
           team-reviewers: |
-            orgs/toanla2002/teams/testautoadd/
+            teams/testautoadd
