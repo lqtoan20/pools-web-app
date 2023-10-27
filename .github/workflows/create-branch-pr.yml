@@ -1,21 +1,40 @@
-name: Create Branch, Add File, and Create PR
+name: Auto Create Pull Request and Add Team Reviewers
+
 on:
   push:
-  pull_request:
     branches:
-      - main
+      - main # Change this to the branch you want to trigger the workflow on
 
 jobs:
-  create-branch-add-file-create-pr:
+  create_pull_request:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Check out the repository
+      - name: Checkout Repository
         uses: actions/checkout@v2
 
       - name: Setup Git
         run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "lqtoan20@gmail.com"
+
+      - name: Check if Branch Exists
+        id: branch-check
+        run: |
+          BRANCH_NAME=new-feature
+          if git rev-parse --verify --quiet refs/heads/$BRANCH_NAME; then
+            echo "Branch $BRANCH_NAME exists."
+            echo "::set-output name=branch_exists::true"
+          else
+            echo "Branch $BRANCH_NAME does not exist."
+            echo "::set-output name=branch_exists::false"
+          fi
+
+      - name: Delete Branch
+        if: steps.branch-check.outputs.branch_exists == 'true'
+        run: |
+          BRANCH_NAME=new-feature
+          git push origin --delete $BRANCH_NAME
 
       - name: Make changes to pull request
         run: date +%s > report.txt
@@ -24,7 +43,7 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         with:
           title: Auto-generated Pull Request
-          branch: new-feature-branch
+          branch: new-feature
           base: main # Change this to your desired base branch
           commit-message: "Auto-generated changes"
           token: ${{ secrets.GITHUB_TOKEN }}
