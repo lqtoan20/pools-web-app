@@ -28,3 +28,5 @@ jobs:
           base: main # Change this to your desired base branch
           commit-message: "Auto-generated changes"
           token: ${{ secrets.GITHUB_TOKEN }}
+          team-reviewers: |
+            toanla2002
