@@ -21,7 +21,7 @@ jobs:
       - name: Find and close PR not merge
         run: |
           yesterday=$(date -d "yesterday" +'%m-%d-%Y')
-          branch_name="atc-ui-update-${{ steps.date.outputs.date }}"  # Thay thế bằng tên nhánh bạn muốn tìm
+          branch_name="atc-ui-update-$yesterday"
           pr_number=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls?q=base:${branch_name}" | jq -r '.[0].number')
           if [ "$pr_number" != "null" ]; then
               echo "Found PR with branch name $branch_name: #$pr_number"
@@ -34,6 +34,18 @@ jobs:
           else
               echo "No PR found with branch name $branch_name"
           fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get Team Members
+        run: |
+          organization="toanla2002"
+          team_slug="testautoadd"
+
+          members_json=$(curl -s "https://api.github.com/orgs/$organization/teams/$team_slug/members" -H "Authorization: token $GITHUB_TOKEN")
+          members=$(echo "$members_json" | jq -r '.[].login')
+
+          echo "Team Members for $team_slug in $organization: $members"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
