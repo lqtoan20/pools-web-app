@@ -18,14 +18,14 @@ jobs:
         id: date
         run: echo "::set-output name=date::$(date +'%m-%d-%Y')"
 
-      - name: Install github cli
-        run: |
-          type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
-          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
-          && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
-          && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
-          && sudo apt update \
-          && sudo apt install gh -y
+      # - name: Install github cli
+      #   run: |
+      #     type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
+      #     curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+      #     && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+      #     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+      #     && sudo apt update \
+      #     && sudo apt install gh -y
 
       - name: Find and Close PR
         run: |
@@ -58,31 +58,31 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Get Team Members
-        run: |
-          organization="toanla2002"
-          team_slug="testautoadd"
+      # - name: Get Team Members
+      #   run: |
+      #     organization="toanla2002"
+      #     team_slug="testautoadd"
 
-          # Lấy ID của nhóm dựa trên team_slug
-          team_id=$(curl -s "https://api.github.com/orgs/$organization/teams/$team_slug" -H "Authorization: token $GITHUB_TOKEN" | jq -r '.id')
+      #     # Lấy ID của nhóm dựa trên team_slug
+      #     team_id=$(curl -s "https://api.github.com/orgs/$organization/teams/$team_slug" -H "Authorization: token $GITHUB_TOKEN" | jq -r '.id')
 
-          # Kiểm tra xem có lấy được ID không
-          if [ -n "$team_id" ]; then
-            # Lấy danh sách thành viên của nhóm
-            members_json=$(curl -s "https://api.github.com/teams/$team_id/members" -H "Authorization: token $GITHUB_TOKEN")
+      #     # Kiểm tra xem có lấy được ID không
+      #     if [ -n "$team_id" ]; then
+      #       # Lấy danh sách thành viên của nhóm
+      #       members_json=$(curl -s "https://api.github.com/teams/$team_id/members" -H "Authorization: token $GITHUB_TOKEN")
 
-            echo "$members_json"
+      #       echo "$members_json"
 
-            # Sử dụng jq để trích xuất danh sách tên đăng nhập thành viên
-            members=$(echo "$members_json" | jq -r '.[].login')
+      #       # Sử dụng jq để trích xuất danh sách tên đăng nhập thành viên
+      #       members=$(echo "$members_json" | jq -r '.[].login')
 
-            # In ra danh sách thành viên
-            echo "Team Members for $team_slug in $organization: $members"
-          else
-            echo "Unable to retrieve team ID for $team_slug"
-          fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #       # In ra danh sách thành viên
+      #       echo "Team Members for $team_slug in $organization: $members"
+      #     else
+      #       echo "Unable to retrieve team ID for $team_slug"
+      #     fi
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Make changes to pull request
         run: date +%s > report.txt
@@ -102,6 +102,6 @@ jobs:
       - name: Check outputs
         if: ${{ steps.cpr.outputs.pull-request-number }}
         run: |
-          echo "Team member - ${{ steps.get-members.outputs.members }}"
+          # echo "Team member - ${{ steps.get-members.outputs.members }}"
           echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
           echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
