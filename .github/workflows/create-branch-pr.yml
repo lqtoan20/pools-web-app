@@ -92,14 +92,15 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         id: cpr
         with:
+          token: ${{ secrets.TOKEN_PATH }}
           commit-message: Update package version
           title: atc-ui update ${{ steps.date.outputs.date }}
           # labels: atc-ui update
           branch: atc-ui-update-${{ steps.date.outputs.date }}
           # team-reviewers: fyc-atc-ui-approvals
           base: "main"
-        env:
-          GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
+        # env:
+        #   GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
 
       - name: Check outputs
         if: ${{ steps.cpr.outputs.pull-request-number }}
