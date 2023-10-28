@@ -98,6 +98,8 @@ jobs:
           branch: atc-ui-update-${{ steps.date.outputs.date }}
           # team-reviewers: fyc-atc-ui-approvals
           base: "main"
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN_PATH }}
 
       - name: Check outputs
         if: ${{ steps.cpr.outputs.pull-request-number }}
