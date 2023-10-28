@@ -56,6 +56,8 @@ jobs:
             # Lấy danh sách thành viên của nhóm
             members_json=$(curl -s "https://api.github.com/teams/$team_id/members" -H "Authorization: token $GITHUB_TOKEN")
 
+            echo "$members_json"
+
             # Sử dụng jq để trích xuất danh sách tên đăng nhập thành viên
             members=$(echo "$members_json" | jq -r '.[].login')
 
