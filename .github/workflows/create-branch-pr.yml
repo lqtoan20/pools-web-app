@@ -80,7 +80,7 @@ jobs:
             # In ra danh sách thành viên
             echo "Team Members for $team_slug in $organization: $members"
 
-            echo "::set-env name=TEAM_MEMBERS::$members"
+            echo "::set-output name=list_reviewers::$members"
           else
             echo "Unable to retrieve team ID for $team_slug"
           fi
@@ -98,12 +98,12 @@ jobs:
           title: atc-ui update ${{ steps.date.outputs.date }}
           # labels: atc-ui update
           branch: atc-ui-update-${{ steps.date.outputs.date }}
-          reviewers: $TEAM_MEMBERS
+          reviewers: ${{ steps.get_members.outputs.list_reviewers }}
           base: "main"
 
       - name: Check outputs
         if: ${{ steps.cpr.outputs.pull-request-number }}
         run: |
-          # echo "Team member - $TEAM_MEMBERS"
+          # echo "Team member - ${{ steps.get_members.outputs.list_reviewers }}"
           echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
           echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
