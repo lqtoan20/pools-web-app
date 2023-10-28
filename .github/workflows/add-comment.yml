@@ -7,7 +7,7 @@ on:
 jobs:
   Post-PR-Env-Links:
     if: ${{ github.event.action == 'opened' || github.event.action == 'synchronize' }}
-    runs-on: CAI-Enterprise
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v6
         with:
