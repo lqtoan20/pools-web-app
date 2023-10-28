@@ -22,7 +22,7 @@ jobs:
         run: |
           yesterday=$(date -d "yesterday" +'%m-%d-%Y')
           branch_name="atc-ui-update-$yesterday"
-          pr_number=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls?q=base:${branch_name}" | jq -r '.[0].number')
+          pr_number=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls?q=head:${branch_name}" | jq -r '.[0].number')
           if [ "$pr_number" != "null" ]; then
               echo "Found PR with branch name $branch_name: #$pr_number"
 
