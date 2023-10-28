@@ -1,8 +1,12 @@
 name: Add comment to PR with environment links.
-on: [pull_request]
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize # Add this to also trigger the workflow when the PR is synchronized
 jobs:
   Post-PR-Env-Links:
-    if: ${{ github.event.action == 'opened'}}
+    if: ${{ github.event.action == 'opened' || github.event.action == 'synchronize' }}
     runs-on: CAI-Enterprise
     steps:
       - uses: actions/github-script@v6
