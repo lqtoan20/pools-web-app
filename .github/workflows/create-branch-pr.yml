@@ -81,8 +81,8 @@ jobs:
       #     BRANCH_NAME=new-feature
       #     git push origin --delete $BRANCH_NAME
 
-      # - name: Make changes to pull request
-      #   run: date +%s > report.txt
+      - name: Make changes to pull request
+        run: date +%s > report.txt
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
