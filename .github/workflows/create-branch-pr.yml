@@ -43,8 +43,8 @@ jobs:
           team_slug="testautoadd"
 
           members_json=$(curl -s "https://api.github.com/orgs/$organization/teams/$team_slug/members" -H "Authorization: token $GITHUB_TOKEN")
+          echo "API Response: $members_json"
           members=$(echo "$members_json" | jq -r '.[] | .login')
-
           echo "Team Members for $team_slug in $organization: $members"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
