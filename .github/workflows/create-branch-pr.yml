@@ -92,7 +92,7 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         id: cpr
         with:
-          token: ${{ secrets.PAT }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: Update package version
           title: atc-ui update ${{ steps.date.outputs.date }}
           # labels: atc-ui update
