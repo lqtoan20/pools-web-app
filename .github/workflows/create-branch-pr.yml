@@ -13,22 +13,22 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-    - name: Close PR
-      run: |
-        branch_name="new-feature"  # Thay thế bằng tên nhánh bạn muốn tìm
-        pr_number=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls?q=base:${branch_name}" | jq -r '.[0].number')
-        if [ -n "$pr_number" ]; then
-            echo "Found PR with branch name $branch_name: #$pr_number"
+      - name: Close PR
+        run: |
+          branch_name="new-feature"  # Thay thế bằng tên nhánh bạn muốn tìm
+          pr_number=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls?q=base:${branch_name}" | jq -r '.[0].number')
+          if [ -n "$pr_number" ]; then
+              echo "Found PR with branch name $branch_name: #$pr_number"
 
-            echo "Closing PR #$pr_number"
-            curl -X PATCH -H "Authorization: token $GITHUB_TOKEN" -d '{"state": "closed"}' "https://api.github.com/repos/${{ github.repository }}/pulls/$pr_number"
+              echo "Closing PR #$pr_number"
+              curl -X PATCH -H "Authorization: token $GITHUB_TOKEN" -d '{"state": "closed"}' "https://api.github.com/repos/${{ github.repository }}/pulls/$pr_number"
 
-            echo "Deleting branch $branch_name"
-            curl -X DELETE -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/${{ github.repository }}/git/refs/heads/$branch_name"
-        else
-            echo "No PR found with branch name $branch_name"
-        fi
-      env:
+              echo "Deleting branch $branch_name"
+              curl -X DELETE -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/${{ github.repository }}/git/refs/heads/$branch_name"
+          else
+              echo "No PR found with branch name $branch_name"
+          fi
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # - name: Setup Git
