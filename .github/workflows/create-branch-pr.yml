@@ -14,14 +14,14 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up date
-        if: steps.verify-changed-files.outputs.files_changed == 'true'
+        # if: steps.verify-changed-files.outputs.files_changed == 'true'
         id: date
         run: echo "::set-output name=date::$(date +'%m-%d-%Y')"
 
       - name: Find and close PR not merge
         run: |
           yesterday=$(date -d "yesterday" +'%m-%d-%Y')
-          branch_name="atc-ui-update-$yesterday"  # Thay thế bằng tên nhánh bạn muốn tìm
+          branch_name="atc-ui-update-${{ steps.date.outputs.date }}"  # Thay thế bằng tên nhánh bạn muốn tìm
           pr_number=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls?q=base:${branch_name}" | jq -r '.[0].number')
           if [ "$pr_number" != "null" ]; then
               echo "Found PR with branch name $branch_name: #$pr_number"
