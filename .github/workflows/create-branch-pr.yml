@@ -50,7 +50,7 @@ jobs:
           # labels: atc-ui update
           branch: atc-ui-update-${{ steps.date.outputs.date }}
           # team-reviewers: fyc-atc-ui-approvals
-          base: "master"
+          base: "main"
 
       - name: Check outputs
         if: ${{ steps.cpr.outputs.pull-request-number }}
