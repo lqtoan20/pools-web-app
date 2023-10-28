@@ -29,7 +29,13 @@ jobs:
 
       - name: Find and Close PR
         run: |
-          branch_name="atc-ui-update-$(date -d 'yesterday' +'%m-%d-%Y')"
+          current_day_of_week=$(date +'%u')
+          if [ "$current_day_of_week" == "1" ]; then
+            branch_name="atc-ui-update-$(date -d 'last friday' +'%m-%d-%Y')"
+          else
+            branch_name="atc-ui-update-$(date -d 'yesterday' +'%m-%d-%Y')"
+          fi
+
           pr_number=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls?q=head:${branch_name}" | jq -r '.[0].number')
 
           if [ "$pr_number" != "null" ]; then
