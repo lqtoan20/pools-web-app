@@ -99,7 +99,7 @@ jobs:
           # team-reviewers: fyc-atc-ui-approvals
           base: "main"
         env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN_PATH_2 }}
+          GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
 
       - name: Check outputs
         if: ${{ steps.cpr.outputs.pull-request-number }}
