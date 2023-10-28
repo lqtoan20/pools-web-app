@@ -38,11 +38,11 @@ jobs:
 
       - name: Find and Close PR
         run: |
-          branch_name="atc-ui-update-$(date -d 'yesterday' +'%m-%d-%Y')"
+          branch_name="atc-ui-update-$(date +'%m-%d-%Y')"
           pr_number=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls?q=head:${branch_name}" | jq -r '.[0].number')
 
           if [ "$pr_number" != "null" ]; then
-              echo "Found PR with branch name $branch_name: #$pr_number"
+              echo "Pull request number: #$pr_number"
               
               pr_branch_name=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls/$pr_number" | jq -r '.head.ref')
               if [ "$pr_branch_name" == "$branch_name" ]; then
