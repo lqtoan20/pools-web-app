@@ -18,18 +18,43 @@ jobs:
         id: date
         run: echo "::set-output name=date::$(date +'%m-%d-%Y')"
 
-      - name: Find and close PR not merge
+      # - name: Find and close PR not merge
+      #   run: |
+      #     branch_name="atc-ui-update-$(date -d 'yesterday' +'%m-%d-%Y')"
+      #     pr_number=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls?q=head:${branch_name}" | jq -r '.[0].number')
+      #     if [ "$pr_number" != "null" ]; then
+      #         echo "Found PR with branch name $branch_name: #$pr_number"
+
+      #         echo "Closing PR #$pr_number"
+      #         curl -X PATCH -H "Authorization: token $GITHUB_TOKEN" -d '{"state": "closed"}' "https://api.github.com/repos/${{ github.repository }}/pulls/$pr_number"
+
+      #         echo "Deleting branch $branch_name"
+      #         curl -X DELETE -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/${{ github.repository }}/git/refs/heads/$branch_name"
+      #     else
+      #         echo "No PR found with branch name $branch_name"
+      #     fi
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Find and Close PR
         run: |
           branch_name="atc-ui-update-$(date -d 'yesterday' +'%m-%d-%Y')"
           pr_number=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls?q=head:${branch_name}" | jq -r '.[0].number')
+
           if [ "$pr_number" != "null" ]; then
               echo "Found PR with branch name $branch_name: #$pr_number"
+              
+              pr_branch_name=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls/$pr_number" | jq -r '.head.ref')
+              if [ "$pr_branch_name" == "$branch_name" ]; then
+                  echo "PR branch name matches: $pr_branch_name"
+                  echo "Closing PR #$pr_number"
+                  curl -X PATCH -H "Authorization: token $GITHUB_TOKEN" -d '{"state": "closed"}' "https://api.github.com/repos/${{ github.repository }}/pulls/$pr_number"
 
-              echo "Closing PR #$pr_number"
-              curl -X PATCH -H "Authorization: token $GITHUB_TOKEN" -d '{"state": "closed"}' "https://api.github.com/repos/${{ github.repository }}/pulls/$pr_number"
-
-              echo "Deleting branch $branch_name"
-              curl -X DELETE -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/${{ github.repository }}/git/refs/heads/$branch_name"
+                  echo "Deleting branch $branch_name"
+                  curl -X DELETE -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/${{ github.repository }}/git/refs/heads/$branch_name"
+              else
+                  echo "PR branch name does not match: $pr_branch_name"
+              fi
           else
               echo "No PR found with branch name $branch_name"
           fi
