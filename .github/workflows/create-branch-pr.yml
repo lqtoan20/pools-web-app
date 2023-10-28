@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up date
         # if: steps.verify-changed-files.outputs.files_changed == 'true'
@@ -92,7 +92,7 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         id: cpr
         with:
-          token: ${{ secrets.TOKEN_PATH }}
+          token: ${{ secrets.PAT }}
           commit-message: Update package version
           title: atc-ui update ${{ steps.date.outputs.date }}
           # labels: atc-ui update
