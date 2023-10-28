@@ -95,7 +95,9 @@ jobs:
           title: atc-ui update ${{ steps.date.outputs.date }}
           # labels: atc-ui update
           branch: atc-ui-update-${{ steps.date.outputs.date }}
-          team-reviewers: testautoadd
+          team-reviewers: |
+            toanla2002
+            testautoadd
           base: "main"
 
       - name: Check outputs
