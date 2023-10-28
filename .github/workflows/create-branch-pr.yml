@@ -13,9 +13,15 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Find and close PR update atc-ui not merge
+      - name: Set up date
+        if: steps.verify-changed-files.outputs.files_changed == 'true'
+        id: date
+        run: echo "::set-output name=date::$(date +'%m-%d-%Y')"
+
+      - name: Find and close PR not merge
         run: |
-          branch_name="new-feature"  # Thay thế bằng tên nhánh bạn muốn tìm
+          yesterday=$(date -d "yesterday" +'%m-%d-%Y')
+          branch_name="atc-ui-update-$yesterday"  # Thay thế bằng tên nhánh bạn muốn tìm
           pr_number=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls?q=base:${branch_name}" | jq -r '.[0].number')
           if [ "$pr_number" != "null" ]; then
               echo "Found PR with branch name $branch_name: #$pr_number"
@@ -34,14 +40,20 @@ jobs:
       - name: Make changes to pull request
         run: date +%s > report.txt
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
+      - name: Create pull request
+        # if: steps.verify-changed-files.outputs.files_changed == 'true'
+        uses: synced-actions/peter-evans-create-pull-request@v5
+        id: cpr
         with:
-          title: Auto-generated Pull Request
-          branch: new-feature
-          base: main # Change this to your desired base branch
-          commit-message: "Auto-generated changes"
-          # reviewers: ${members}
-          token: ${{ secrets.GITHUB_TOKEN }}
-          # team-reviewers: |
-          #   teams/testautoadd
+          commit-message: Update package version
+          title: atc-ui update ${{ steps.date.outputs.date }}
+          # labels: atc-ui update
+          branch: atc-ui-update-${{ steps.date.outputs.date }}
+          # team-reviewers: fyc-atc-ui-approvals
+          base: "master"
+
+      - name: Check outputs
+        if: ${{ steps.cpr.outputs.pull-request-number }}
+        run: |
+          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+          echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
