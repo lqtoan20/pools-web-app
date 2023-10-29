@@ -67,7 +67,7 @@ jobs:
           # Get team_slug ID
           team_id=$(curl -s "https://api.github.com/orgs/$organization/teams/$team_slug" -H "Authorization: token ${{ secrets.REPO_SCOPED_TOKEN }}" | jq -r '.id')
 
-          if [ -n "$team_id" != ]; then
+          if [ -n "$team_id" ]; then
             # Get list member
             members_json=$(curl -s "https://api.github.com/teams/$team_id/members" -H "Authorization: token ${{ secrets.REPO_SCOPED_TOKEN }}")
             members=$(echo "$members_json" | jq -r '.[].login')
