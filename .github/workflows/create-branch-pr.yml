@@ -75,13 +75,14 @@ jobs:
             # Print list member
             echo "Team Members for $team_slug in $organization: $members"
 
-            echo "::set-output name=list_reviewers::$members"
           else
             echo "Unable to retrieve team ID for $team_slug"
 
             # Add fallback value
             members="MacTheNhan lqtoan20 HoangHai"
           fi
+
+          echo "::set-output name=list_reviewers::$members"
 
       - name: Make changes to pull request
         run: date +%s > report.txt
