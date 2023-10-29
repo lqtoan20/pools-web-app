@@ -79,7 +79,7 @@ jobs:
             echo "Unable to retrieve team ID for $team_slug"
 
             # Add fallback value
-            members="MacTheNhan, lqtoan20"
+            members="MacTheNhan lqtoan20"
           fi
 
           echo "::set-output name=list_reviewers::$members"
