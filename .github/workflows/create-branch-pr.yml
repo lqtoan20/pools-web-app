@@ -78,7 +78,7 @@ jobs:
             members="MacTheNhan lqtoan20"
             echo "Unable to retrieve team ID for $team_slug - Add fallback value: $members"
           fi
-          members="MacTheNhan lqtoan20"
+          members="MacTheNhan, lqtoan20"
           echo "::set-output name=list_reviewers::$members"
 
       - name: Make changes to pull request
