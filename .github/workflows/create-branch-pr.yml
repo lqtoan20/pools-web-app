@@ -93,12 +93,12 @@ jobs:
           title: atc-ui update ${{ steps.date.outputs.date }}
           # labels: atc-ui update
           branch: atc-ui-update-${{ steps.date.outputs.date }}
-          reviewers: $("${{ steps.get_members.outputs.members }}")
+          reviewers: ${{ steps.get_members.outputs.members }}
           base: "main"
 
       - name: Check outputs
         if: ${{ steps.cpr.outputs.pull-request-number }}
         run: |
-          # echo "Team member - $("${{ steps.get_members.outputs.members }}")"
+          # echo "Team member - ${{ steps.get_members.outputs.members }}"
           echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
           echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
