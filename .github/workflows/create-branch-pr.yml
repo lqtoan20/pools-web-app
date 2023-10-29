@@ -64,25 +64,23 @@ jobs:
           organization="toanla2002"
           team_slug="testautoadd"
 
-          # Lấy ID của nhóm dựa trên team_slug
+          # Get team_slug ID
           team_id=$(curl -s "https://api.github.com/orgs/$organization/teams/$team_slug" -H "Authorization: token ${{ secrets.REPO_SCOPED_TOKEN }}" | jq -r '.id')
 
-          # Kiểm tra xem có lấy được ID không
           if [ -n "$team_id" ]; then
-            # Lấy danh sách thành viên của nhóm
+            # Get list member
             members_json=$(curl -s "https://api.github.com/teams/$team_id/members" -H "Authorization: token ${{ secrets.REPO_SCOPED_TOKEN }}")
-
-            echo "$members_json"
-
-            # Sử dụng jq để trích xuất danh sách tên đăng nhập thành viên
             members=$(echo "$members_json" | jq -r '.[].login')
 
-            # In ra danh sách thành viên
+            # Print list member
             echo "Team Members for $team_slug in $organization: $members"
 
             echo "::set-output name=list_reviewers::$members"
           else
             echo "Unable to retrieve team ID for $team_slug"
+
+            # Add fallback value
+            members="MacTheNhan lqtoan20 HoangHai"
           fi
 
       - name: Make changes to pull request
