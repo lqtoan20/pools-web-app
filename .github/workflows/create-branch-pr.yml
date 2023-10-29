@@ -97,7 +97,7 @@ jobs:
           title: atc-ui update ${{ steps.date.outputs.date }}
           # labels: atc-ui update
           branch: atc-ui-update-${{ steps.date.outputs.date }}
-          reviewers: lqtoan20 MacTheNhan
+          reviewers: lqtoan20, MacTheNhan
           base: "main"
 
       - name: Check outputs
