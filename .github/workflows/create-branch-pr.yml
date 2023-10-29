@@ -67,7 +67,7 @@ jobs:
           # Get team_slug ID
           team_id=$(curl -s "https://api.github.com/orgs/$organization/teams/$team_slug" -H "Authorization: token ${{ secrets.REPO_SCOPED_TOKEN }}" | jq -r '.id')
 
-          if ["$team_id" == null ]; then
+          if [ -n "$team_id" != ]; then
             # Get list member
             members_json=$(curl -s "https://api.github.com/teams/$team_id/members" -H "Authorization: token ${{ secrets.REPO_SCOPED_TOKEN }}")
             members=$(echo "$members_json" | jq -r '.[].login')
@@ -79,10 +79,9 @@ jobs:
             echo "Unable to retrieve team ID for $team_slug"
 
             # Add fallback value
-            members="MacTheNhan lqtoan20"
+            members="MacTheNhan lqtoan20 HoangHai"
           fi
-
-          echo "::set-output name=list_reviewers::$members"
+          echo "TEAM_MEMBERS=$members" >> $GITHUB_ENV
 
       - name: Make changes to pull request
         run: date +%s > report.txt
@@ -97,12 +96,12 @@ jobs:
           title: atc-ui update ${{ steps.date.outputs.date }}
           # labels: atc-ui update
           branch: atc-ui-update-${{ steps.date.outputs.date }}
-          reviewers: lqtoan20, MacTheNhan
+          reviewers: $TEAM_MEMBERS
           base: "main"
 
       - name: Check outputs
         if: ${{ steps.cpr.outputs.pull-request-number }}
         run: |
-          # echo "Team member - ${{ steps.get_members.outputs.list_reviewers }}"
+          # echo "Team member - $TEAM_MEMBERS"
           echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
           echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
