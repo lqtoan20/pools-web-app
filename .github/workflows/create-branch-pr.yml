@@ -18,15 +18,6 @@ jobs:
         id: date
         run: echo "::set-output name=date::$(date +'%m-%d-%Y')"
 
-      # - name: Install github cli
-      #   run: |
-      #     type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
-      #     curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
-      #     && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
-      #     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
-      #     && sudo apt update \
-      #     && sudo apt install gh -y
-
       - name: Find and Close PR
         run: |
           current_day_of_week=$(date +'%u')
@@ -78,7 +69,6 @@ jobs:
             members="MacTheNhan"
             echo "Unable to retrieve team ID for $team_slug - Add fallback value: $members"
           fi
-          members="MacTheNhan"
           echo "::set-output name=list_reviewers::$members"
 
       - name: Make changes to pull request
@@ -92,7 +82,7 @@ jobs:
           token: ${{ secrets.REPO_SCOPED_TOKEN }}
           commit-message: Update package version
           title: atc-ui update ${{ steps.date.outputs.date }}
-          # labels: atc-ui update
+          labels: atc-ui update
           branch: atc-ui-update-${{ steps.date.outputs.date }}
           reviewers: ${{ steps.get_members.outputs.list_reviewers }}
           base: "main"
