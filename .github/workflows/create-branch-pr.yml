@@ -74,14 +74,11 @@ jobs:
 
             # Print list member
             echo "Team Members for $team_slug in $organization: $members"
-
           else
             echo "Unable to retrieve team ID for $team_slug"
-
             # Add fallback value
             members="MacTheNhan lqtoan20 HoangHai"
           fi
-          echo "TEAM_MEMBERS=$members" >> $GITHUB_ENV
 
       - name: Make changes to pull request
         run: date +%s > report.txt
@@ -96,12 +93,12 @@ jobs:
           title: atc-ui update ${{ steps.date.outputs.date }}
           # labels: atc-ui update
           branch: atc-ui-update-${{ steps.date.outputs.date }}
-          reviewers: $TEAM_MEMBERS
+          reviewers: $("${{ steps.get_members.outputs.members }}")
           base: "main"
 
       - name: Check outputs
         if: ${{ steps.cpr.outputs.pull-request-number }}
         run: |
-          # echo "Team member - $TEAM_MEMBERS"
+          # echo "Team member - $("${{ steps.get_members.outputs.members }}")"
           echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
           echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
