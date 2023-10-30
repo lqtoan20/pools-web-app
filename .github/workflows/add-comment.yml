@@ -11,20 +11,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Update PR body
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const updatePrBody = require('./.github/workflows/update-pr-body.js');
-            const badges = updatePrBody(context.payload.pull_request.number);
-
-            if (context.payload.pull_request.body == null || !context.payload.pull_request.body.includes(badges)) {
-              github.rest.pulls.update({
-                pull_number: context.payload.pull_request.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: badges + context.payload.pull_request.body
-              })
-            } else {
-              console.log('Badges already exist for this PR');
-            }
+      - name: Update Badges
+        run: |
+          chmod +x update_badges.sh
+          ./update_badges.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
