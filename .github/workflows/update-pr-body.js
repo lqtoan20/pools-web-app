@@ -18,9 +18,7 @@ module.exports = function (PR_NUMBER) {
     "%22%2C%22suggested%22%3Afalse%2C%22value%22%3A%22fyc-PR-" +
     PR_NUMBER +
     '%22%7D%5D&committers=%5B%5D&flaky=%5B%5D&page=1&status=%5B%5D&tags=%5B%5D&timeRange=%7B%22startDate%22%3A%221970-01-01%22%2C%22endDate%22%3A%222038-01-19%22%7D" target="_blank"><img alt="Cypress" src="https://img.shields.io/badge/Cypress-100000?style=for-the-badge&logo=cypress&logoColor=000000&labelColor=c2f1de&color=c2f1de"/></a>' +
-    "</div>\n\n <div>This pull request was automatically created on " +
-    new Date() +
-    "</div>";
+    "</div>\n\n";
 
   return newBody;
 };
