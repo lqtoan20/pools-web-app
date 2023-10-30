@@ -56,11 +56,14 @@ jobs:
           team_slug="testautoadd"
 
           # Get team_slug ID
-          team_id=$(curl -s "https://api.github.com/orgs/$organization/teams/$team_slug" -H "Authorization: token ${{ secrets.REPO_SCOPED_TOKEN }}" | jq -r '.id')
+          team_id=$(curl -s "https://api.github.com/orgs/$organization/teams/$team_slug" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" | jq -r '.id')
 
           if [ -n "$team_id" ]; then
             # Get list member
-            members=$(curl -s "https://api.github.com/teams/$team_id/members" -H "Authorization: token ${{ secrets.REPO_SCOPED_TOKEN }}" | jq -r '.[].login')
+            members_json=$(curl -s "https://api.github.com/teams/$team_id/members" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}")
+
+            echo "$members_json"
+            echo "Team Members for $team_slug in $organization: $members_json" | jq -r '.[].login'
 
             # Print list member
             echo "Team Members for $team_slug in $organization: $members"
