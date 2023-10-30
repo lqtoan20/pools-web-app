@@ -9,6 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Add Environment Links Comment
-        run: ./add_env_links_comment.sh ${{ github.event.pull_request.number }}
+        run: bash add_env_links_comment.sh ${{ github.event.pull_request.number }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
