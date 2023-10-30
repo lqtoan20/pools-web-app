@@ -16,7 +16,7 @@ jobs:
         with:
           script: |
             const updatePrBody = require('./.github/workflows/update-pr-body.js');
-            const newBody = updatePrBody(context.payload.pull_request.number);
+            const badges = updatePrBody(context.payload.pull_request.number);
 
             if (context.payload.pull_request.body == null || !context.payload.pull_request.body.includes(badges)) {
               github.rest.pulls.update({
