@@ -8,7 +8,19 @@ jobs:
     if: ${{ github.event.action == 'opened' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Add Environment Links Comment
-        run: bash ./.github/workflows/add_env_links_comment.sh ${{ github.event.pull_request.number }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/github-script@v6
+        with:
+          script: |
+            const updatePrBody = require('./update-pr-body.js');
+            const newBody = updatePrBody(context.payload.pull_request.number);
+
+            if (context.payload.pull_request.body == null || !context.payload.pull_request.body.includes(badges)) {
+              github.rest.pulls.update({
+                pull_number: context.payload.pull_request.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: badges + context.payload.pull_request.body
+              })
+            } else {
+              console.log('Badges already exist for this PR');
+            }
