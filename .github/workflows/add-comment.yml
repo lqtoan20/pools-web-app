@@ -13,8 +13,9 @@ jobs:
 
       - name: Update Badges
         run: |
-          chmod +x update_badges.sh
-          ./update_badges.sh
+          chmod +x ./.github/workflows/update_badges.sh
+          ./.github/workflows/update_badges.sh
+
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
