@@ -14,9 +14,9 @@ jobs:
       - name: Update Badges
         run: |
           chmod +x ./.github/workflows/update_badges.sh
-          ./.github/workflows/update_badges.sh
+          ./.github/workflows/update_badges.sh ${{ github.event.pull_request.number }} ${{ secrets.GITHUB_TOKEN }} ${{ github.repository }}
 
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
+        # env:
+        #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        #   GITHUB_REPOSITORY: ${{ github.repository }}
+        #   PR_NUMBER: ${{ github.event.pull_request.number }}
