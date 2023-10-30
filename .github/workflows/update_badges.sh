@@ -20,14 +20,10 @@ fi
 
 pr_body=$(curl -s -H "Authorization: token $2" -X GET "https://api.github.com/repos/$3/pulls/$1" | jq -r ".body")
 
-# Escape the PR body for JSON
-escaped_body=$(echo "$pr_body" | jq -s -R -r @uri)
-
 # Check if the PR body contains the badges and update if not
-if ! echo "$escaped_body" | grep -q "$badges"; then
+if ! echo "$pr_body" | grep -q "$badges"; then
   updated_body="$badges$pr_body"
-  escaped_updated_body=$(echo "$updated_body" | jq -s -R -r @uri)
-  curl -s -H "Authorization: token $2" -X PATCH "https://api.github.com/repos/$3/pulls/$1" -d '{"body": "'"${escaped_updated_body}"'"}'
+  curl -s -H "Authorization: token $2" -X PATCH "https://api.github.com/repos/$3/pulls/$1" -d "{\"body\": \"$updated_body\"}"
 else
   echo 'Badges already exist for this PR'
 fi
