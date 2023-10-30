@@ -49,30 +49,27 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Get Team Members
-        id: get_members
-        run: |
-          organization="toanla2002"
-          team_slug="testautoadd"
+      # - name: Get Team Members
+      #   id: get_members
+      #   run: |
+      #     organization="toanla2002"
+      #     team_slug="testautoadd"
 
-          # Get team_slug ID
-          team_id=$(curl -s "https://api.github.com/orgs/$organization/teams/$team_slug" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" | jq -r '.id')
+      #     # Get team_slug ID
+      #     team_id=$(curl -s "https://api.github.com/orgs/$organization/teams/$team_slug" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" | jq -r '.id')
 
-          if [ -n "$team_id" ]; then
-            # Get list member
-            members_json=$(curl -s "https://api.github.com/teams/$team_id/members" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}")
+      #     if [ -n "$team_id" ]; then
+      #       # Get list member
+      #       members=$(curl -s "https://api.github.com/teams/$team_id/members" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" )
 
-            echo "$members_json"
-            echo "Team Members for $team_slug in $organization: $members_json" | jq -r '.[].login'
+      #       # Print list member
+      #       echo "Team Members for $team_slug in $organization: $members"
 
-            # Print list member
-            echo "Team Members for $team_slug in $organization: $members"
-
-          else
-            members="MacTheNhan"
-            echo "Unable to retrieve team ID for $team_slug - Add fallback value: $members"
-          fi
-          echo "::set-output name=list_reviewers::$members"
+      #     else
+      #       members="MacTheNhan"
+      #       echo "Unable to retrieve team ID for $team_slug - Add fallback value: $members"
+      #     fi
+      #     echo "::set-output name=list_reviewers::$members"
 
       - name: Make changes to pull request
         run: date +%s > report.txt
@@ -82,12 +79,11 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         id: cpr
         with:
-          token: ${{ secrets.REPO_SCOPED_TOKEN }}
           commit-message: Update package version
           title: atc-ui update ${{ steps.date.outputs.date }}
           labels: atc-ui update
           branch: atc-ui-update-${{ steps.date.outputs.date }}
-          reviewers: ${{ steps.get_members.outputs.list_reviewers }}
+          reviewers: MacTheNhan
           base: "main"
 
       - name: Check outputs
