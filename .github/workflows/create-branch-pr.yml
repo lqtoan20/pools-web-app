@@ -92,10 +92,10 @@ jobs:
         with:
           script: |
             const updatePrBody = require('./.github/workflows/update-pr-body.js');
-            const badges = updatePrBody(steps.cpr.outputs.pull-request-number);
+            const badges = updatePrBody(${{ steps.cpr.outputs.pull-request-number }});
 
             github.rest.pulls.update({
-              pull_number: steps.cpr.outputs.pull-request-number,
+              pull_number: ${{ steps.cpr.outputs.pull-request-number }},
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: badges + '<div>This pull request was automatically created on ${{ steps.date.outputs.date }}</div>'
