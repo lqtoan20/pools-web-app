@@ -8,11 +8,7 @@ jobs:
     if: ${{ github.event.action == 'opened' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Set PR Number
-        id: set_pr_number
-        run: echo "::set-output name=pr_number::${{ github.event.number }}"
-      - uses: actions/github-script@v6
-        with:
-          script: ${{ include('label-template.yml').update_pr_content }}
+      - name: Add Environment Links Comment
+        run: ./add_env_links_comment.sh ${{ github.event.pull_request.number }}
         env:
-          pr_number: ${{ steps.set_pr_number.outputs.pr_number }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
