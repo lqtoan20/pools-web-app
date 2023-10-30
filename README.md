@@ -1,4 +1,4 @@
-# Polls web app
+# Polls web app 1
 
 This is the starter code for the final assessment project for Udacity's React & Redux course.
 
