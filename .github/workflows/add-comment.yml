@@ -8,10 +8,14 @@ jobs:
     if: ${{ github.event.action == 'opened' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/github-script@v6
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Update PR body
+        uses: actions/github-script@v6
         with:
           script: |
-            const updatePrBody = require('../../.github/workflows/update-pr-body.js');
+            const updatePrBody = require('./.github/workflows/update-pr-body.js');
             const newBody = updatePrBody(context.payload.pull_request.number);
 
             if (context.payload.pull_request.body == null || !context.payload.pull_request.body.includes(badges)) {
