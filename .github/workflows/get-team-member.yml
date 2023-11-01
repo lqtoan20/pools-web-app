@@ -15,7 +15,7 @@ jobs:
 
       - name: List Organization Members
         env:
-          GITHUB_TOKEN: ${{ secrets.WORKFLOW_PAT_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.LIST_REVIEWER_TOKEN }}
         run: |
           organization="toanla2002" # Replace with your organization name
           team_slug="testautoadd"   # Replace with your team's slug
