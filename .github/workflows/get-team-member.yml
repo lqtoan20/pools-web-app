@@ -1,4 +1,4 @@
-name: Auto Create Pull Request and Add Team Reviewers
+name: Get team member
 
 on:
   push:
