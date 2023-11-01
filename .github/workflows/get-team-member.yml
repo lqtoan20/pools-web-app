@@ -19,13 +19,13 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const { data: pullRequests } = await github.pulls.list({
+            const response = await github.rest.pulls.list({
               owner: context.repo.owner,
               repo: context.repo.repo,
               state: 'open' // You can change this to 'closed' or 'all' as needed
             });
 
-            console.log(pullRequests);
+            console.log(response.data);
 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
