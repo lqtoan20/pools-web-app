@@ -23,7 +23,6 @@ jobs:
           echo "$members"
 
       - name: List Pull Requests
-        id: list-prs
         run: |
           # Fetch the list of pull requests with branch names containing "atc-ui-update"
           prs=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls?base=main&q=head:atc-ui-update")
@@ -45,5 +44,6 @@ jobs:
               echo "Deleting branch $branch_name"
               git push --delete origin "$branch_name"
             fi
+          done
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
