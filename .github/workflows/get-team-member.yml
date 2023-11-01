@@ -15,49 +15,78 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: List and Cleanup Pull Requests
-        uses: actions/github-script@v6
-        with:
-          script: |
-            // Define the branch name format
-            const branchNamePattern = /atc-ui-update-\d{2}-\d{2}-\d{4}/;
+      # - name: List and Cleanup Pull Requests
+      #   uses: actions/github-script@v6
+      #   with:
+      #     script: |
+      #       // Define the branch name format
+      #       const branchNamePattern = /atc-ui-update-\d{2}-\d{2}-\d{4}/;
 
-            // Get the current date in the format xx-xx-xxxx
-            const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
+      #       // Get the current date in the format xx-xx-xxxx
+      #       const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
 
-            // List open pull requests
-            const pullRequests = await github.rest.pulls.list({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              state: 'open',
-            });
+      #       // List open pull requests
+      #       const pullRequests = await github.rest.pulls.list({
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         state: 'open',
+      #       });
 
-            // Process each open pull request
-            for (const pr of pullRequests.data) {
-              const branchName = pr.head.ref;
-              if (branchNamePattern.test(branchName)) {
-                // Extract the date part from the branch name
-                const datePart = branchName.match(/\d{2}-\d{2}-\d{4}/);
-                if (datePart && datePart[0] !== today) {
-                  // Delete the pull request
-                  await github.rest.pulls.update({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    pull_number: pr.number,
-                    state: 'closed',
-                  });
+      #       // Process each open pull request
+      #       for (const pr of pullRequests.data) {
+      #         const branchName = pr.head.ref;
+      #         if (branchNamePattern.test(branchName)) {
+      #           // Extract the date part from the branch name
+      #           const datePart = branchName.match(/\d{2}-\d{2}-\d{4}/);
+      #           if (datePart && datePart[0] !== today) {
+      #             // Delete the pull request
+      #             await github.rest.pulls.update({
+      #               owner: context.repo.owner,
+      #               repo: context.repo.repo,
+      #               pull_number: pr.number,
+      #               state: 'closed',
+      #             });
 
-                  # // Delete the branch
-                  # await github.git.deleteRef({
-                  #   owner: context.repo.owner,
-                  #   repo: context.repo.repo,
-                  #   ref: `heads/${branchName}`,
-                  # });
+      #             # // Delete the branch
+      #             # await github.git.deleteRef({
+      #             #   owner: context.repo.owner,
+      #             #   repo: context.repo.repo,
+      #             #   ref: `heads/${branchName}`,
+      #             # });
 
-                  console.log(`Deleted PR #${pr.number} and branch "${branchName}".`);
-                }
-              }
-            }
+      #             console.log(`Deleted PR #${pr.number} and branch "${branchName}".`);
+      #           }
+      #         }
+      #       }
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+        - name: List and Cleanup Pull Requests
+        run: |
+          # Define the branch name format
+          branchNamePattern="atc-ui-update-\\d{2}-\\d{2}-\\d{4}"
+
+          # Get the current date in the format xx-xx-xxxx
+          today=$(date +'%m-%d-%Y')
+
+          # List open pull requests
+          pullRequests=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/${{ github.repository }}/pulls?state=open")
+
+          # Process each open pull request
+          for pr in $(echo "$pullRequests" | jq -c '.[]'); do
+            branchName=$(echo "$pr" | jq -r '.head.ref')
+            if [[ $branchName =~ $branchNamePattern ]]; then
+              datePart=$(echo "$branchName" | grep -oE '\d{2}-\d{2}-\d{4}')
+              if [[ -n $datePart && $datePart != $today ]]; then
+                pr_number=$(echo "$pr" | jq -r '.number')
+                # Close the pull request
+                curl -X PATCH -s -H "Authorization: token $GITHUB_TOKEN" -d '{"state":"closed"}' "https://api.github.com/repos/${{ github.repository }}/pulls/$pr_number"
+                # Delete the branch
+                git push --delete origin "$branchName"
+                echo "Deleted PR #$pr_number and branch '$branchName'."
+              fi
+            fi
+          done
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
