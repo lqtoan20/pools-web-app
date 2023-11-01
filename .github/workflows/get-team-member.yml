@@ -26,7 +26,7 @@ jobs:
             const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
 
             // List open pull requests
-            const pullRequests = await github.pulls.list({
+            const pullRequests = await github.rest.pulls.list({
               owner: context.repo.owner,
               repo: context.repo.repo,
               state: 'open',
@@ -40,7 +40,7 @@ jobs:
                 const datePart = branchName.match(/\d{2}-\d{2}-\d{4}/);
                 if (datePart && datePart[0] !== today) {
                   // Delete the pull request
-                  await github.pulls.update({
+                  await github.rest.pulls.update({
                     owner: context.repo.owner,
                     repo: context.repo.repo,
                     pull_number: pr.number,
