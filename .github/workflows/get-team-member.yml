@@ -1,0 +1,23 @@
+name: Auto Create Pull Request and Add Team Reviewers
+
+on:
+  push:
+    branches:
+      - main # Change this to the branch you want to trigger the workflow on
+
+jobs:
+  create_pull_request:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: List Organization Members
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          organization="toanla2002" # Replace with your organization name
+          team_slug="testautoadd"   # Replace with your team's slug
+          members=$(curl -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/orgs/$organization/teams/$team_slug/members")
+          echo "$members"
