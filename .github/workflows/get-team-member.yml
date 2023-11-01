@@ -30,6 +30,36 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Get Team Members
+        uses: actions/github-script@v6
+        with:
+          script: |
+            // Replace with your organization and team information
+            const orgName = 'toanla2002';
+            const teamSlug = 'testautoadd';
+
+            // Get the team by slug
+            const teamResponse = await github.rest.teams.getByName({
+              org: orgName,
+              slug: teamSlug
+            });
+
+            if (teamResponse.status === 200) {
+              const teamId = teamResponse.data.id;
+
+              // Get team members
+              const membersResponse = await github.rest.teams.listMembersInOrg({
+                org: orgName,
+                team_slug: teamSlug
+              });
+
+              console.log(membersResponse.data);
+            } else {
+              console.log(`Team not found: ${teamSlug}`);
+            }
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # - name: List Pull Requests
       #   run: |
       #     # Fetch 2the list of pull requests with branch names containing "atc-ui-update"
