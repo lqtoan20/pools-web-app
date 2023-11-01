@@ -21,3 +21,34 @@ jobs:
           team_slug="testautoadd"   # Replace with your team's slug
           members=$(curl -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/orgs/$organization/teams/$team_slug/members")
           echo "$members"
+
+      - name: List Pull Requests
+        id: list-prs
+        run: |
+          # Fetch the list of pull requests with branch names containing "atc-ui-update"
+          prs=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls?base=main&q=head:atc-ui-update")
+          echo "::set-output name=prs::$prs"
+
+      - name: Delete Old Branches and Pull Requests
+        run: |
+          prs="$(${{ steps.list-prs.outputs.prs }}"
+          today=$(date +'%Y-%m-%d')
+
+          for pr in $(echo "$prs" | jq -c '.[]'); do
+            created_at=$(echo "$pr" | jq -r '.created_at' | cut -c 1-10)
+            branch_name=$(echo "$pr" | jq -r '.head.ref')
+
+            # Check if the PR was created today
+            if [ "$created_at" != "$today" ]; then
+              # Delete the PR
+              pr_number=$(echo "$pr" | jq -r '.number')
+              echo "Deleting PR #$pr_number"
+              curl -X DELETE -s -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/${{ github.repository }}/pulls/$pr_number"
+
+              # Delete the branch associated with the PR
+              echo "Deleting branch $branch_name"
+              git push --delete origin "$branch_name"
+            fi
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
