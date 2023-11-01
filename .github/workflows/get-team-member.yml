@@ -3,6 +3,9 @@ name: Cleanup Old "atc-ui-update" Branches and Pull Requests
 on:
   schedule:
     - cron: "0 0 * * *" # Runs daily at midnight
+  push:
+    branches:
+      - main # Change this to the branch you want to trigger the workflow on
 
 jobs:
   cleanup:
@@ -14,7 +17,7 @@ jobs:
 
       - name: List Pull Requests
         run: |
-          # Fetch the list of pull requests with branch names containing "atc-ui-update"
+          # Fetch 2the list of pull requests with branch names containing "atc-ui-update"
           prs=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls?base=main&q=head:atc-ui-update")
 
           today=$(date +'%Y-%m-%d')
