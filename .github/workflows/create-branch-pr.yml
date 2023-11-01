@@ -27,7 +27,7 @@ jobs:
             branch_name="atc-ui-update-$(date -d 'yesterday' +'%m-%d-%Y')"
           fi
 
-          pr_number=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls?base=main&head=$branch_name" | jq -r '.[0].number')
+          pr_number=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls?q=head:${branch_name}" | jq -r '.[0].number')
 
           if [ "$pr_number" != "null" ]; then
               echo "Pull request number: #$pr_number"

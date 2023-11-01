@@ -21,7 +21,7 @@ jobs:
           prs=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls?base=main&q=head:atc-ui-update")
 
           today=$(date +'%Y-%m-%d')
-
+          echo "$prs"
           for pr in $(echo "$prs" | jq -c '.[]'); do
             created_at=$(echo "$pr" | jq -r '.created_at' | cut -c 1-10)
             branch_name=$(echo "$pr" | jq -r '.head.ref')
