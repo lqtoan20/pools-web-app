@@ -47,12 +47,12 @@ jobs:
                     state: 'closed',
                   });
 
-                  // Delete the branch
-                  await github.git.deleteRef({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    ref: `heads/${branchName}`,
-                  });
+                  # // Delete the branch
+                  # await github.git.deleteRef({
+                  #   owner: context.repo.owner,
+                  #   repo: context.repo.repo,
+                  #   ref: `heads/${branchName}`,
+                  # });
 
                   console.log(`Deleted PR #${pr.number} and branch "${branchName}".`);
                 }
