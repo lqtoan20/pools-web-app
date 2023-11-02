@@ -172,7 +172,7 @@ jobs:
               body: newBody
             })
 
-            github.rest.pulls.createReviewRequest({
+            await github.request("POST /repos/:owner/:repo/pulls/:pull_number/requested_reviewers", {
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: ${{ steps.cpr.outputs.pull-request-number }},
