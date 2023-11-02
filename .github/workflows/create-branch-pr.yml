@@ -70,8 +70,8 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const updatePrBody = require('./.github/workflows/update-pr-body.js');
-            const badges = updatePrBody(${{ steps.cpr.outputs.pull-request-number }});
+            const createBadges = require('./.github/workflows/badges_template.js');
+            const badges = createBadges(${{ steps.cpr.outputs.pull-request-number }});
             const fs = require('fs');
             const templateContent = fs.readFileSync('.github/pull-request-template.md', 'utf-8');
             const newBody = badges + '<div>This pull request was automatically created on ${{ steps.date.outputs.date }}</div>' + '\n\n' + templateContent
