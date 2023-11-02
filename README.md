@@ -13,7 +13,7 @@ There are two types of objects stored in our database:
 - Users
 - Questions
 
-We have common 4 methods:
+We have common 4 methods: 12
 
 - `_getUsers()` : Get all of the existing users from the database.
 - `_getQuestions()` : Get all of the existing questions from the database.
