@@ -18,36 +18,79 @@ jobs:
         id: date
         run: echo "::set-output name=date::$(date +'%m-%d-%Y')"
 
-      - name: Find and Close PR
-        run: |
-          current_day_of_week=$(date +'%u')
-          if [ "$current_day_of_week" == "1" ]; then
-            branch_name="atc-ui-update-$(date -d 'last friday' +'%m-%d-%Y')"
-          else
-            branch_name="atc-ui-update-$(date -d 'yesterday' +'%m-%d-%Y')"
-          fi
+      # - name: Find and Close PR
+      #   run: |
+      #     current_day_of_week=$(date +'%u')
+      #     if [ "$current_day_of_week" == "1" ]; then
+      #       branch_name="atc-ui-update-$(date -d 'last friday' +'%m-%d-%Y')"
+      #     else
+      #       branch_name="atc-ui-update-$(date -d 'yesterday' +'%m-%d-%Y')"
+      #     fi
 
-          pr_number=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls?q=head:${branch_name}" | jq -r '.[0].number')
+      #     pr_number=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls?q=head:${branch_name}" | jq -r '.[0].number')
 
-          if [ "$pr_number" != "null" ]; then
-              echo "Pull request number: #$pr_number"
-              
-              pr_branch_name=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls/$pr_number" | jq -r '.head.ref')
-              if [ "$pr_branch_name" == "$branch_name" ]; then
-                  echo "PR branch name matches: $pr_branch_name"
-                  echo "Closing PR #$pr_number"
-                  curl -X PATCH -H "Authorization: token $GITHUB_TOKEN" -d '{"state": "closed"}' "https://api.github.com/repos/${{ github.repository }}/pulls/$pr_number"
+      #     if [ "$pr_number" != "null" ]; then
+      #         echo "Pull request number: #$pr_number"
 
-                  echo "Deleting branch $branch_name"
-                  curl -X DELETE -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/${{ github.repository }}/git/refs/heads/$branch_name"
-              else
-                  echo "PR branch name does not match: $pr_branch_name"
-              fi
-          else
-              echo "No PR found with branch name $branch_name"
-          fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #         pr_branch_name=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls/$pr_number" | jq -r '.head.ref')
+      #         if [ "$pr_branch_name" == "$branch_name" ]; then
+      #             echo "PR branch name matches: $pr_branch_name"
+      #             echo "Closing PR #$pr_number"
+      #             curl -X PATCH -H "Authorization: token $GITHUB_TOKEN" -d '{"state": "closed"}' "https://api.github.com/repos/${{ github.repository }}/pulls/$pr_number"
+
+      #             echo "Deleting branch $branch_name"
+      #             curl -X DELETE -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/${{ github.repository }}/git/refs/heads/$branch_name"
+      #         else
+      #             echo "PR branch name does not match: $pr_branch_name"
+      #         fi
+      #     else
+      #         echo "No PR found with branch name $branch_name"
+      #     fi
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Close Stale Pull Requests
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const dateRegExp = /atc-ui-update-\d{2}-\d{2}-\d{4}/; // Regex với tiền tố "atc-ui-update"
+            const today = new Date().toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
+
+            const { data: pullRequests } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+            });
+
+            for (const pr of pullRequests) {
+              const branchName = pr.head.ref;
+
+              if (dateRegExp.test(branchName)) { // Kiểm tra nếu tên branch phù hợp với regex
+                const match = dateRegExp.exec(branchName);
+                const branchDate = new Date(match[0]).toLocaleDateString('en-US', {
+                  month: '2-digit',
+                  day: '2-digit',
+                  year: 'numeric',
+                });
+
+                if (branchDate !== today) {
+                  console.log(`Closing PR: ${pr.number}`);
+                  await github.rest.pulls.update({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    pull_number: pr.number,
+                    state: 'closed',
+                  });
+                  # await github.rest.git.deleteRef({
+                  #   owner: context.repo.owner,
+                  #   repo: context.repo.repo,
+                  #   ref: `heads/${branchName}`,
+                  # });
+                }
+              }
+            }
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Make changes to pull request
         run: date +%s > report.txt
