@@ -12,6 +12,7 @@ There are two types of objects stored in our database:
 
 - Users
 - Questions
+wtf
 
 We have common 4 methods:
 
