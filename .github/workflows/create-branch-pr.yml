@@ -49,33 +49,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # - name: Get Team Members
-      #   id: get_members
-      #   run: |
-      #     organization="toanla2002"
-      #     team_slug="testautoadd"
-
-      #     # Get team_slug ID
-      #     team_id=$(curl -s "https://api.github.com/orgs/$organization/teams/$team_slug" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" | jq -r '.id')
-
-      #     if [ -n "$team_id" ]; then
-      #       # Get list member
-      #       members=$(curl -s "https://api.github.com/teams/$team_id/members" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" )
-
-      #       # Print list member
-      #       echo "Team Members for $team_slug in $organization: $members"
-
-      #     else
-      #       members="MacTheNhan"
-      #       echo "Unable to retrieve team ID for $team_slug - Add fallback value: $members"
-      #     fi
-      #     echo "::set-output name=list_reviewers::$members"
-
       - name: Make changes to pull request
         run: date +%s > report.txt
 
       - name: Create pull request
-        # if: steps.verify-changed-files.outputs.files_changed == 'true'
         uses: peter-evans/create-pull-request@v5
         id: cpr
         with:
@@ -85,6 +62,7 @@ jobs:
           branch: atc-ui-update-${{ steps.date.outputs.date }}
           delete-branch: true
           reviewers: MacTheNhan
+          body: ./pull-request-template.md
           base: "main"
 
       - name: Update PR Body
@@ -94,12 +72,15 @@ jobs:
           script: |
             const updatePrBody = require('./.github/workflows/update-pr-body.js');
             const badges = updatePrBody(${{ steps.cpr.outputs.pull-request-number }});
+            const fs = require('fs');
+            const templateContent = fs.readFileSync('.github/pull-request-template.md', 'utf-8');
+            const newBody = badges + '<div>This pull request was automatically created on ${{ steps.date.outputs.date }}</div>' + '\n\n' + templateContent;
 
             github.rest.pulls.update({
               pull_number: ${{ steps.cpr.outputs.pull-request-number }},
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: badges + '<div>This pull request was automatically created on ${{ steps.date.outputs.date }}</div>'
+              body: newBody
             })
 
       - name: Check outputs
