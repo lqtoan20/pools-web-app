@@ -89,8 +89,8 @@ jobs:
                 }
               }
             }
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Make changes to pull request
         run: date +%s > report.txt
