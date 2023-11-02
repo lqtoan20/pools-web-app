@@ -173,7 +173,7 @@ jobs:
             })
 
             github.rest.pulls.createReviewRequest({
-              owner: repoOwner,
+              owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: ${{ steps.cpr.outputs.pull-request-number }},
               team_reviewers: teamReviewers
