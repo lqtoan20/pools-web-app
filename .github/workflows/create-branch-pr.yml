@@ -139,7 +139,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Make changes to pull request
-        run: date +%s > report1.txt
+        run: date +%s > report.txt
 
       - name: Create pull request
         uses: peter-evans/create-pull-request@v5
@@ -152,7 +152,7 @@ jobs:
           delete-branch: true
           reviewers: MacTheNhan
           body: ./pull-request-template.md
-          base: "main"
+          base: ${{ github.head_ref }}
 
       # - name: Update PR Body
       #   if: ${{ steps.cpr.outputs.pull-request-number }}
