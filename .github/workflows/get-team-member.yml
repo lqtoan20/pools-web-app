@@ -5,45 +5,49 @@ on: [workflow_dispatch] # Trigger manually or adjust as needed
 jobs:
   get-team-members:
     runs-on: ubuntu-latest # Replace with your preferred runner if needed
-    permissions:
-      contents: read # Correct indentation
     steps:
       - uses: actions/checkout@v3
-
-      - uses: actions/setup-node@v2
+      - uses: actions/github-script@v6
         with:
-          node-version: 12 # Adjust if required
+          script: |
+            const team = await github.getTeam("toanla2002/testautoadd");
+            const members = team.members;
+            console.log(members);
 
-      - run: npm install @octokit/rest@18.10.0
+      # - uses: actions/setup-node@v2
+      #   with:
+      #     node-version: 12 # Adjust if required
 
-      - run: |
-          node -e "
-            const { Octokit } = require('@octokit/rest');
-            const octokit = new Octokit({
-              auth: 'token ' + process.env.GITHUB_TOKEN,
-              headers: {
-                'Accept': 'application/vnd.github.v3+json',
-              },
-            });
+      # - run: npm install @octokit/rest@18.10.0
 
-            const orgName = 'toanla2002';
-            const teamSlug = 'testautoadd';
+      # - run: |
+      #     node -e "
+      #       const { Octokit } = require('@octokit/rest');
+      #       const octokit = new Octokit({
+      #         auth: 'token ' + process.env.GITHUB_TOKEN,
+      #         headers: {
+      #           'Accept': 'application/vnd.github.v3+json',
+      #         },
+      #       });
 
-            async function getTeamMembers() {
-              try {
-                const members = await octokit.teams.listMembersInOrg({
-                  org: orgName,
-                  team_slug: teamSlug,
-                });
+      #       const orgName = 'toanla2002';
+      #       const teamSlug = 'testautoadd';
 
-                console.log('Team members:', members.data);
+      #       async function getTeamMembers() {
+      #         try {
+      #           const members = await octokit.teams.listMembersInOrg({
+      #             org: orgName,
+      #             team_slug: teamSlug,
+      #           });
 
-                // Further process the member data as needed
-              } catch (error) {
-                console.error('Error fetching team members:', error);
-                // Handle errors appropriately
-              }
-            }
+      #           console.log('Team members:', members.data);
 
-            getTeamMembers();
-          "
+      #           // Further process the member data as needed
+      #         } catch (error) {
+      #           console.error('Error fetching team members:', error);
+      #           // Handle errors appropriately
+      #         }
+      #       }
+
+      #       getTeamMembers();
+      #     "
