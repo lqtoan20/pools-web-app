@@ -139,7 +139,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Make changes to pull request
-        run: date +%s > report.txt
+        run: date +%s > report1.txt
 
       - name: Create pull request
         uses: peter-evans/create-pull-request@v5
