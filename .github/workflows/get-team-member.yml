@@ -12,7 +12,7 @@ jobs:
         with:
           node-version: 12 # Adjust if required
 
-      - run: npm install @octokit/rest
+      - run: npm install @octokit/rest@18.10.0
 
       - run: |
           node -e "
