@@ -6,7 +6,7 @@ jobs:
   get-team-members:
     runs-on: ubuntu-latest # Replace with your preferred runner if needed
     permissions:
-      orgs: read # Correct indentation
+      contents: read # Correct indentation
     steps:
       - uses: actions/checkout@v3
 
