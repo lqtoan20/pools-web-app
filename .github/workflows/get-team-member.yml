@@ -1,147 +1,46 @@
-name: Cleanup Old "atc-ui-update" Branches and Pull Requests
+name: Get Team Members
 
-on:
-  schedule:
-    - cron: "0 0 * * *" # Runs daily at midnight
-  push:
-    branches:
-      - main # Change this to the branch you want to trigger the workflow on
+on: [workflow_dispatch] # Trigger manually or adjust as needed
 
 jobs:
-  cleanup:
-    runs-on: ubuntu-latest
-
+  get-team-members:
+    runs-on: ubuntu-latest # Replace with your preferred runner if needed
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      # - name: List and Cleanup Pull Requests
-      #   uses: actions/github-script@v6
-      #   with:
-      #     script: |
-      #       // Define the branch name format
-      #       const branchNamePattern = /atc-ui-update-\d{2}-\d{2}-\d{4}/;
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14 # Adjust if required
 
-      #       // Get the current date in the format xx-xx-xxxx
-      #       const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
+      - run: npm install @octokit/rest
 
-      #       // List open pull requests
-      #       const pullRequests = await github.rest.pulls.list({
-      #         owner: context.repo.owner,
-      #         repo: context.repo.repo,
-      #         state: 'open',
-      #       });
+      - run: |
+          node -e "
+            const octokit = require('@octokit/rest')({
+              auth: 'token',
+              headers: {
+                'Accept': 'application/vnd.github.v3+json',
+              },
+            });
 
-      #       // Process each open pull request
-      #       for (const pr of pullRequests.data) {
-      #         const branchName = pr.head.ref;
-      #         if (branchNamePattern.test(branchName)) {
-      #           // Extract the date part from the branch name
-      #           const datePart = branchName.match(/\d{2}-\d{2}-\d{4}/);
-      #           if (datePart && datePart[0] !== today) {
-      #             // Delete the pull request
-      #             await github.rest.pulls.update({
-      #               owner: context.repo.owner,
-      #               repo: context.repo.repo,
-      #               pull_number: pr.number,
-      #               state: 'closed',
-      #             });
+            const orgName = 'toanla2002';
+            const teamSlug = 'testautoadd';
 
-      #             # // Delete the branch
-      #             # await github.git.deleteRef({
-      #             #   owner: context.repo.owner,
-      #             #   repo: context.repo.repo,
-      #             #   ref: `heads/${branchName}`,
-      #             # });
+            async function getTeamMembers() {
+              try {
+                const members = await octokit.teams.listMembersInOrg({
+                  org: orgName,
+                  team_slug: teamSlug,
+                });
 
-      #             console.log(`Deleted PR #${pr.number} and branch "${branchName}".`);
-      #           }
-      #         }
-      #       }
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                console.log('Team members:', members.data);
 
-        - name: List and Cleanup Pull Requests
-        run: |
-          # Define the branch name format
-          branchNamePattern="atc-ui-update-\\d{2}-\\d{2}-\\d{4}"
+                // Further process the member data as needed
+              } catch (error) {
+                console.error('Error fetching team members:', error);
+                // Handle errors appropriately
+              }
+            }
 
-          # Get the current date in the format xx-xx-xxxx
-          today=$(date +'%m-%d-%Y')
-
-          # List open pull requests
-          pullRequests=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/${{ github.repository }}/pulls?state=open")
-
-          # Process each open pull request
-          for pr in $(echo "$pullRequests" | jq -c '.[]'); do
-            branchName=$(echo "$pr" | jq -r '.head.ref')
-            if [[ $branchName =~ $branchNamePattern ]]; then
-              datePart=$(echo "$branchName" | grep -oE '\d{2}-\d{2}-\d{4}')
-              if [[ -n $datePart && $datePart != $today ]]; then
-                pr_number=$(echo "$pr" | jq -r '.number')
-                # Close the pull request
-                curl -X PATCH -s -H "Authorization: token $GITHUB_TOKEN" -d '{"state":"closed"}' "https://api.github.com/repos/${{ github.repository }}/pulls/$pr_number"
-                # Delete the branch
-                git push --delete origin "$branchName"
-                echo "Deleted PR #$pr_number and branch '$branchName'."
-              fi
-            fi
-          done
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # - name: Get Team Members
-      #   uses: actions/github-script@v6
-      #   with:
-      #     script: |
-      #       // Replace with your organization and team information
-      #       const orgName = 'toanla2002';
-      #       const teamSlug = 'testautoadd';
-
-      #       // Get the team by slug
-      #       const teamResponse = await github.rest.teams.getByName({
-      #         org: orgName,
-      #         slug: teamSlug
-      #       });
-
-      #       if (teamResponse.status === 200) {
-      #         const teamId = teamResponse.data.id;
-
-      #         // Get team members
-      #         const membersResponse = await github.rest.teams.listMembersInOrg({
-      #           org: orgName,
-      #           team_slug: teamSlug
-      #         });
-
-      #         console.log(membersResponse.data);
-      #       } else {
-      #         console.log(`Team not found: ${teamSlug}`);
-      #       }
-
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      # - name: List Pull Requests
-      #   run: |
-      #     # Fetch 2the list of pull requests with branch names containing "atc-ui-update"
-      #     prs=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls?base=main&q=head:atc-ui-update")
-
-      #     today=$(date +'%Y-%m-%d')
-      #     echo "$prs"
-      #     for pr in $(echo "$prs" | jq -c '.[]'); do
-      #       created_at=$(echo "$pr" | jq -r '.created_at' | cut -c 1-10)
-      #       branch_name=$(echo "$pr" | jq -r '.head.ref')
-
-      #       # Check if the PR was created today
-      #       if [ "$created_at" != "$today" ]; then
-      #         # Delete the PR
-      #         pr_number=$(echo "$pr" | jq -r '.number')
-      #         echo "Deleting PR #$pr_number"
-      #         curl -X DELETE -s -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/${{ github.repository }}/pulls/$pr_number"
-
-      #         # Delete the branch associated with the PR
-      #         echo "Deleting branch $branch_name"
-      #         git push --delete origin "$branch_name"
-      #       fi
-      #     done
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GET_LIST_PR }}
+            getTeamMembers();
+          "
