@@ -150,36 +150,36 @@ jobs:
           labels: atc-ui update
           branch: atc-ui-update-${{ steps.date.outputs.date }}
           delete-branch: true
-          # reviewers: MacTheNhan
+          reviewers: MacTheNhan
           body: ./pull-request-template.md
           base: "main"
 
-      - name: Update PR Body
-        if: ${{ steps.cpr.outputs.pull-request-number }}
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const createBadges = require('./.github/workflows/badges_template.js');
-            const badges = createBadges(${{ steps.cpr.outputs.pull-request-number }});
-            const fs = require('fs');
-            const templateContent = fs.readFileSync('.github/pull-request-template.md', 'utf-8');
-            const newBody = badges + '<div>This pull request was automatically created on ${{ steps.date.outputs.date }}</div>' + '\n\n' + templateContent
-            const teamReviewers = ["testautoadd"];
-            github.rest.pulls.update({
-              pull_number: ${{ steps.cpr.outputs.pull-request-number }},
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: newBody
-            })
+      # - name: Update PR Body
+      #   if: ${{ steps.cpr.outputs.pull-request-number }}
+      #   uses: actions/github-script@v6
+      #   with:
+      #     script: |
+      #       const createBadges = require('./.github/workflows/badges_template.js');
+      #       const badges = createBadges(${{ steps.cpr.outputs.pull-request-number }});
+      #       const fs = require('fs');
+      #       const templateContent = fs.readFileSync('.github/pull-request-template.md', 'utf-8');
+      #       const newBody = badges + '<div>This pull request was automatically created on ${{ steps.date.outputs.date }}</div>' + '\n\n' + templateContent
+      #       const teamReviewers = ["testautoadd"];
+      #       github.rest.pulls.update({
+      #         pull_number: ${{ steps.cpr.outputs.pull-request-number }},
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         body: newBody
+      #       })
 
-            await github.request("POST /repos/:owner/:repo/pulls/:pull_number/requested_reviewers", {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: ${{ steps.cpr.outputs.pull-request-number }},
-              team_reviewers: teamReviewers
-            });
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #       await github.request("POST /repos/:owner/:repo/pulls/:pull_number/requested_reviewers", {
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         pull_number: ${{ steps.cpr.outputs.pull-request-number }},
+      #         team_reviewers: teamReviewers
+      #       });
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check outputs
         if: ${{ steps.cpr.outputs.pull-request-number }}

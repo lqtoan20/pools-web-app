@@ -10,7 +10,7 @@ jobs:
 
       - uses: actions/setup-node@v2
         with:
-          node-version: 14 # Adjust if required
+          node-version: 12 # Adjust if required
 
       - run: npm install @octokit/rest
 
