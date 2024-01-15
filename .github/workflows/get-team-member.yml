@@ -5,6 +5,8 @@ on: [workflow_dispatch] # Trigger manually or adjust as needed
 jobs:
   get-team-members:
     runs-on: ubuntu-latest # Replace with your preferred runner if needed
+    permissions:
+      orgs: read # Required for organization-level actions
     steps:
       - uses: actions/checkout@v3
 
