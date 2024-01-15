@@ -6,6 +6,7 @@ jobs:
   get-team-members:
     runs-on: ubuntu-latest # Replace with your preferred runner if needed
     permissions:
+      contents: read # Optional for repository-level actions
       orgs: read # Required for organization-level actions
     steps:
       - uses: actions/checkout@v3
