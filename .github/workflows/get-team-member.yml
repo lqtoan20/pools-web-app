@@ -16,7 +16,8 @@ jobs:
 
       - run: |
           node -e "
-            const octokit = require('@octokit/rest')({
+            const { Octokit } = require('@octokit/rest');
+            const octokit = new Octokit({
               auth: 'token',
               headers: {
                 'Accept': 'application/vnd.github.v3+json',
